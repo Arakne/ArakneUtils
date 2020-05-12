@@ -71,6 +71,12 @@ class Base64Test {
     }
 
     @Test
+    void chrMod() {
+        assertEquals('a', Base64.chrMod(64));
+        assertEquals('r', Base64.chrMod(145));
+    }
+
+    @Test
     void decodeWithOneChar() {
         assertEquals(0, Base64.decode("a"));
         assertEquals(2, Base64.decode("c"));
