@@ -45,15 +45,8 @@
                         </goals>
                         <configuration>
                             <append>true</append>
-                            <destFile>${jacoco.reportPath}</destFile>
+                            <destFile>${jacoco.report.file}</destFile>
                         </configuration>
-                    </execution>
-                    <execution>
-                        <id>jacoco-report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>

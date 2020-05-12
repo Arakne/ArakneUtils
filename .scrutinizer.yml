@@ -9,5 +9,5 @@ build:
                 override:
                     - command: mvn test
                       coverage:
-                        file: 'target/jacoco.exec'
+                        file: 'target/jacoco/jacoco.xml'
                         format: 'jacoco'
