@@ -19,30 +19,8 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>arakne-encoding</module>
+        <module>arakne-value</module>
     </modules>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.4</version>
-                <executions>
-                    <execution>
-                        <id>jacoco-report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <configuration>
-                            <dataFile>${jacoco.report.file}</dataFile>
-                            <outputDirectory>${jacoco.report.dir}</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
     <distributionManagement>
         <repository>
