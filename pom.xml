@@ -20,6 +20,7 @@
     <modules>
         <module>arakne-encoding</module>
         <module>arakne-value</module>
+        <module>arakne-map</module>
     </modules>
 
     <distributionManagement>

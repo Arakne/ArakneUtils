@@ -127,6 +127,30 @@ final public class Base64 {
     }
 
     /**
+     * Encode a byte array to Base64 string
+     *
+     * Example:
+     * <code>
+     *     Base64.encode(new byte[] {2, 31}); // "cF"
+     * </code>
+     *
+     * @param data Data to encode
+     *
+     * @return The encoded value. The result length is the same as the data size
+     *
+     * @see Base64#toBytes(String) For the opposite operation
+     */
+    static public String encode(byte[] data) {
+        final char[] encoded = new char[data.length];
+
+        for (int i = 0; i < data.length; ++i) {
+            encoded[i] = chr(data[i]);
+        }
+
+        return new String(encoded);
+    }
+
+    /**
      * Decode pseudo base64 value to int
      *
      * Example:

@@ -121,4 +121,10 @@ class Base64Test {
         assertArrayEquals(new byte[] {2}, Base64.toBytes("c"));
         assertArrayEquals(new byte[] {2, 31}, Base64.toBytes("cF"));
     }
+
+    @Test
+    void encodeWithByteArray() {
+        assertEquals("", Base64.encode(new byte[0]));
+        assertEquals("cF", Base64.encode(new byte[] {2, 31}));
+    }
 }
