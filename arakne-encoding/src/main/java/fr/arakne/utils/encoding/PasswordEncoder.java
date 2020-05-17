@@ -48,6 +48,8 @@ final public class PasswordEncoder {
 
     /**
      * Get the encoding key
+     *
+     * @return The key
      */
     public String key() {
         return key;
@@ -101,6 +103,9 @@ final public class PasswordEncoder {
 
     /**
      * Encode the password using the key
+     *
+     * @param password The raw password
+     * @return The encoded password
      *
      * @throws IllegalArgumentException When the password is too long
      */

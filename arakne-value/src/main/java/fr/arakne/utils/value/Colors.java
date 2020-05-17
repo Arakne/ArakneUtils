@@ -66,6 +66,8 @@ final public class Colors {
      * <code>
      *     new Color(14, 87, 12).toArray(); // int[] {14, 87, 12}
      * </code>
+     *
+     * @return The array representation of the color
      */
     public int[] toArray() {
         return new int[] {color1, color2, color3};
@@ -79,6 +81,8 @@ final public class Colors {
      * <code>
      *     new Color(14, 87, 12).toArray(); // int[] {"e", "57", "c"}
      * </code>
+     *
+     * @return The array representation of the color, in hexadecimal string
      */
     public String[] toHexArray() {
         return hexStream().toArray(String[]::new);
@@ -94,6 +98,7 @@ final public class Colors {
      * </code>
      *
      * @param separator The separator to use between each colors
+     * @return The hexadecimal CSV string
      */
     public String toHexString(CharSequence separator) {
         return hexStream().collect(Collectors.joining(separator));
@@ -101,6 +106,8 @@ final public class Colors {
 
     /**
      * Create a new colors set with random values
+     *
+     * @return A new random Colors
      */
     static public Colors randomized() {
         if (random == null) {
@@ -114,6 +121,8 @@ final public class Colors {
      * Create a new colors set with random values
      *
      * @param random The random generator
+     *
+     * @return A new random Colors
      */
     static public Colors randomized(Random random) {
         return new Colors(

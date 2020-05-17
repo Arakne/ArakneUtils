@@ -38,17 +38,23 @@ public enum Race {
     PANDAWA;
 
     /**
+     * Cache values
+     */
+    final static private Race[] values = values();
+
+    /**
      * Get a character race by its id
      *
      * @param id The race id
+     * @return The race item
      *
-     * @throws IndexOutOfBoundsException
+     * @throws IndexOutOfBoundsException When an invalid id is given
      */
     static public Race byId(int id) {
-        if (id >= values().length || id == 0) {
+        if (id >= values.length || id == 0) {
             throw new IndexOutOfBoundsException("Invalid race " + id);
         }
 
-        return values()[id];
+        return values[id];
     }
 }

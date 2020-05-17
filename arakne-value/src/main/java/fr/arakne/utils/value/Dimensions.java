@@ -35,6 +35,8 @@ final public class Dimensions {
 
     /**
      * Get the width
+     *
+     * @return The width
      */
     public int width() {
         return width;
@@ -42,6 +44,8 @@ final public class Dimensions {
 
     /**
      * Get the height
+     *
+     * @return The height
      */
     public int height() {
         return height;

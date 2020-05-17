@@ -30,6 +30,8 @@ public enum Gender {
      * Get Gender from string value
      *
      * @param value String to parse
+     *
+     * @return The Gender
      */
     static public Gender parse(String value) {
         if (value.equals("0")) {

@@ -59,6 +59,11 @@ final public class RandomUtil extends Random {
      * The interval is inclusive
      *
      * If max if lower than min, min is returned
+     *
+     * @param min The minimal value, included
+     * @param max The maximal value, included
+     *
+     * @return A random int
      */
     public int rand(int min, int max) {
         if (max <= min) {
@@ -75,6 +80,11 @@ final public class RandomUtil extends Random {
     /**
      * Get random number into given interval
      * The interval is inclusive
+     *
+     * This method is equivalent to `rand(interval.min(), interval.max())`
+     *
+     * @param interval The rand interval
+     * @return A random int
      */
     public int rand(Interval interval) {
         return rand(interval.min(), interval.max());
@@ -84,6 +94,7 @@ final public class RandomUtil extends Random {
      * Get a random double between interval [0, max[
      *
      * @param max The maximum value (exclusive)
+     * @return A random double
      */
     public double decimal(double max) {
         return nextDouble() * max;
@@ -91,6 +102,9 @@ final public class RandomUtil extends Random {
 
     /**
      * Get a random number from an interval
+     *
+     * @param interval An array of size 1 or 2. If the size is 1, return the array element, else return an array between interval[0] and interval[1] included
+     * @return A random int
      */
     public int rand(int[] interval) {
         if (interval.length == 1 || interval[0] > interval[1]) {
@@ -106,6 +120,8 @@ final public class RandomUtil extends Random {
      * @param percent Percent of chance that the returned value is true.
      *                If the value is 100, this method will always returns true
      *                If the value is 0, the method will always returns false
+     *
+     * @return A random boolean
      */
     public boolean bool(int percent) {
         return nextInt(100) < percent;
@@ -117,6 +133,7 @@ final public class RandomUtil extends Random {
      *
      * This method is equivalent to `bool(50)`
      *
+     * @return A random boolean
      * @see RandomUtil#bool(int)
      */
     public boolean bool() {
@@ -144,6 +161,7 @@ final public class RandomUtil extends Random {
      * All elements has the same selection probability
      *
      * @param values The provided values
+     * @param <T> The array element type
      *
      * @return One of the element of the array
      */
@@ -153,6 +171,10 @@ final public class RandomUtil extends Random {
 
     /**
      * Get a random value from an array of characters
+     *
+     * @param values The provided values
+     *
+     * @return One of the element of the array
      *
      * @see RandomUtil#of(Object[])
      */
@@ -165,6 +187,7 @@ final public class RandomUtil extends Random {
      * All elements has the same selection probability
      *
      * @param values The provided values
+     * @param <T> The list element type
      *
      * @return One of the element of the list
      */
@@ -192,6 +215,8 @@ final public class RandomUtil extends Random {
     /**
      * Create a new RandomUtil instance which is shared between instances (store in a static field)
      * This method allows the system to reset the random seed value when enable testing mode, for predictable random
+     *
+     * @return A new RandomUtil instance
      */
     static public RandomUtil createShared() {
         RandomUtil random = new RandomUtil();

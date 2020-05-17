@@ -33,6 +33,8 @@ public interface InteractiveObjectData extends CellLayerData {
 
     /**
      * Does the object is interactive ?
+     *
+     * @return true if the layer contains an interactive object
      */
     public boolean interactive();
 }

@@ -27,33 +27,45 @@ import fr.arakne.utils.maps.constant.CellMovement;
 public interface CellData {
     /**
      * Check if the cell do not block the line of sight
+     *
+     * @return false if block line of sight
      */
     public boolean lineOfSight();
 
     /**
      * Get the permitted movement type
      * The value is an int in range [0 - 7]
+     *
+     * @return The movement value
      */
     public CellMovement movement();
 
     /**
      * Check if the cell is active or not
+     *
+     * @return true if the cell if active
      */
     public boolean active();
 
     /**
      * Get the ground layer
+     *
+     * @return The ground layer
      */
     public GroundCellData ground();
 
     /**
      * Get the first layer object
+     *
+     * @return The object1 layer
      */
     public CellLayerData layer1();
 
     /**
      * Get the second layer object
      * Can contains an interactive object
+     *
+     * @return The object2 layer
      */
     public InteractiveObjectData layer2();
 }

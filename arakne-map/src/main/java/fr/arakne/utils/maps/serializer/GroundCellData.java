@@ -25,11 +25,15 @@ package fr.arakne.utils.maps.serializer;
 public interface GroundCellData extends CellLayerData {
     /**
      * Get the ground elevation level
+     *
+     * @return The level as int
      */
     public int level();
 
     /**
      * Get the ground slope
+     *
+     * @return The slope as int
      */
     public int slope();
 }

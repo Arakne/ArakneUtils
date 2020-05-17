@@ -73,6 +73,8 @@ public enum CellMovement {
 
     /**
      * Check if the current movement is for a walkable cell
+     *
+     * @return true is the cel is walkable
      */
     public boolean walkable() {
         return ordinal() > 1;
@@ -80,6 +82,9 @@ public enum CellMovement {
 
     /**
      * Get a cell movement by its integer value
+     *
+     * @param value The movement id
+     * @return The movement item
      */
     static public CellMovement byValue(int value) {
         return values[value];

@@ -80,6 +80,9 @@ final public class Base64 {
      *     Base64.chr(Base64.ord('B')) == 'B';
      * </code>
      *
+     * @param value Value to encode. Must be in interval [0, 63]
+     * @return Encoded value
+     *
      * @see Base64#ord(char) For perform the opposite operation
      * @see Base64#encode(int, int) For encode a 32 bits integer to a string
      */
@@ -90,6 +93,9 @@ final public class Base64 {
     /**
      * Get the base 64 character for the value,
      * but after applying a modulo on the value to ensure that the call will not fail
+     *
+     * @param value Value to encode.
+     * @return Encoded value
      */
     static public char chrMod(int value) {
         return CHARSET[value % CHARSET.length];
@@ -160,6 +166,7 @@ final public class Base64 {
      * </code>
      *
      * @param encoded The encoded value
+     * @return The decoded value
      *
      * @throws IllegalArgumentException When an invalid string is given
      */

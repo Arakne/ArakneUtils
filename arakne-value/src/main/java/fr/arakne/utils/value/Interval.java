@@ -34,7 +34,8 @@ final public class Interval {
     /**
      * @param min Minimal value of the interval
      * @param max Maximal value of the interval
-     * @throws IllegalArgumentException When max < min
+     *
+     * @throws IllegalArgumentException When max is lower than min
      */
     public Interval(int min, int max) {
         if (max < min) {
@@ -47,6 +48,8 @@ final public class Interval {
 
     /**
      * The minimal value of the interval
+     *
+     * @return The min value
      */
     public int min() {
         return min;
@@ -54,6 +57,8 @@ final public class Interval {
 
     /**
      * The maximal value of the interval
+     *
+     * @return The max value
      */
     public int max() {
         return max;
@@ -74,7 +79,7 @@ final public class Interval {
     /**
      * Modify the end of the interval
      * The returned interval will be [min, max + modifier]
-     * If the new end is lower than the min (i.e. -modifier > max - min), the interval [min, min] will be returned
+     * If the new end is lower than the min (i.e. -modifier higher than max - min), the interval [min, min] will be returned
      *
      * @param modifier The modifier value. If positive will increase max, if negative will decrease
      *

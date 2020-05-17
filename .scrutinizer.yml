@@ -15,3 +15,7 @@ build:
                       coverage:
                         file: 'arakne-value/target/site/jacoco/jacoco.xml'
                         format: 'jacoco'
+                    - command: mvn test -pl arakne-map
+                      coverage:
+                        file: 'arakne-map/target/site/jacoco/jacoco.xml'
+                        format: 'jacoco'

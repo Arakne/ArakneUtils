@@ -26,6 +26,9 @@ public interface MapDataSerializer {
     /**
      * Parse serialized map data to cells
      *
+     * @param mapData The raw map data
+     * @return The deserialized cells
+     *
      * @throws IllegalArgumentException When invalid mapData is given
      */
     public CellData[] deserialize(String mapData);
@@ -34,6 +37,9 @@ public interface MapDataSerializer {
      * Serialize the cells to a string
      * The result value must be compatible with deserialize()
      * So, the code `serializer.serialize(serializer.deserialize(mapData)).equals(mapData)` must always return true
+     *
+     * @param cells Cells to serialize
+     * @return The serialized cells
      */
     public String serialize(CellData[] cells);
 }
