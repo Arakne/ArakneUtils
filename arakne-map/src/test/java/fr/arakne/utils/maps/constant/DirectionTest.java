@@ -64,7 +64,7 @@ class DirectionTest {
 
         assertArrayEquals(
             new Direction[] {Direction.SOUTH_EAST, Direction.SOUTH_WEST, Direction.NORTH_WEST, Direction.NORTH_EAST},
-            Direction.RESTRICTED
+            Direction.restrictedDirections()
         );
     }
 

@@ -290,7 +290,7 @@ final public class Pathfinder<C extends MapCell> {
     /**
      * Available movements directions
      */
-    private Direction[] directions = Direction.RESTRICTED;
+    private Direction[] directions = Direction.restrictedDirections();
 
     /**
      * Maximum number of explored cells

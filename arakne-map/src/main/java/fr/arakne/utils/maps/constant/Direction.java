@@ -38,7 +38,7 @@ public enum Direction {
     /**
      * Array of restricted directions (can be used on fight)
      */
-    final static public Direction[] RESTRICTED = Arrays.stream(values()).filter(Direction::restricted).toArray(Direction[]::new);
+    final static private Direction[] restricted = Arrays.stream(values()).filter(Direction::restricted).toArray(Direction[]::new);
 
     /**
      * Cache values
@@ -116,5 +116,15 @@ public enum Direction {
      */
     static public Direction byChar(char c) {
         return values[c - 'a'];
+    }
+
+    /**
+     * Get the restricted directions (i.e. can be used on fight)
+     * Note: a new array is always returned
+     *
+     * @return The array of Direction
+     */
+    static public Direction[] restrictedDirections() {
+        return restricted.clone();
     }
 }
