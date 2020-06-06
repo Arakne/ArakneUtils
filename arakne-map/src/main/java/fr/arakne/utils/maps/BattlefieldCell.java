@@ -17,19 +17,14 @@
  * Copyright (c) 2017-2020 Vincent Quatrevieux
  */
 
-package fr.arakne.utils.maps._test;
+package fr.arakne.utils.maps;
 
-import fr.arakne.utils.maps.AbstractCellDataAdapter;
-import fr.arakne.utils.maps.BattlefieldCell;
-import fr.arakne.utils.maps.serializer.CellData;
-
-public class MyDofusCell extends AbstractCellDataAdapter<MyDofusMap> implements BattlefieldCell {
-    public MyDofusCell(MyDofusMap map, CellData data, int id) {
-        super(map, data, id);
-    }
-
-    @Override
-    public boolean sightBlocking() {
-        return !data.lineOfSight();
-    }
+/**
+ * Base type for a battlefield cell
+ */
+public interface BattlefieldCell extends MapCell {
+    /**
+     * Check if the cell block line of sight
+     */
+    public boolean sightBlocking();
 }
