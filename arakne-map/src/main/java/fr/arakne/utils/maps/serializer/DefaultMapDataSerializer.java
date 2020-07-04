@@ -20,6 +20,7 @@
 package fr.arakne.utils.maps.serializer;
 
 import fr.arakne.utils.encoding.Base64;
+import fr.arakne.utils.encoding.Key;
 import fr.arakne.utils.maps.constant.CellMovement;
 
 import java.util.Map;
@@ -168,6 +169,34 @@ final public class DefaultMapDataSerializer implements MapDataSerializer {
      */
     public void disableCache() {
         cache = null;
+    }
+
+    /**
+     * Get a MapDataSerializer for encrypted map with the given key
+     * Use the current serializer as inner serializer (and also use the current cache)
+     *
+     * @param key The encryption key
+     *
+     * @return The map serializer
+     */
+    public MapDataSerializer withKey(Key key) {
+        return new EncryptedMapDataSerializer(key, this);
+    }
+
+    /**
+     * Get a MapDataSerializer for encrypted map with the given key
+     * This is equivalent to `serializer.withKey(Key.parse(key));`
+     *
+     * <code>
+     *     CellData[] cells = serializer.withKey(gdm.key()).deserialize(mapData);
+     * </code>
+     *
+     * @param key The encryption key as string
+     *
+     * @return The map serializer
+     */
+    public MapDataSerializer withKey(String key) {
+        return withKey(Key.parse(key));
     }
 
     private CellData deserializeCell(String cellData) {

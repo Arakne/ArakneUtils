@@ -1,4 +1,4 @@
-# Arakne Map
+# Arakne Map [![javadoc](https://javadoc.io/badge2/fr.arakne/arakne-map/javadoc.svg)](https://javadoc.io/doc/fr.arakne/arakne-map) [![Maven Central](https://img.shields.io/maven-central/v/fr.arakne/arakne-map)](https://search.maven.org/artifact/fr.arakne/arakne-map)
 
 Map data parser and utilities algorithms for maps and cells.
 
@@ -35,6 +35,21 @@ data[15].layer2().interactive(); // Check if the cell 15 has an interactive obje
 
 // Serialize map data
 String mapData = serializer.serialize(data);
+```
+
+Encrypted cells are also supported, using the [EncryptedMapDataSerializer](src/main/java/fr/arakne/utils/maps/serializer/EncryptedMapDataSerializer.java) :
+
+```java
+DefaultMapDataSerializer serializer = new DefaultMapDataSerializer();
+
+// A key is given on the GDM packet : use this key to decrypt map
+if (!gdm.key().isEmpty()) {
+    // Deserialize the map data
+    CellData[] data = serializer.withKey(gdm.key()).deserialize(encryptedMapData);
+} else {
+    // No key : simply parse the map
+    CellData[] data = serializer.deserialize(encryptedMapData);
+}
 ```
 
 ### Map implementation
@@ -178,6 +193,25 @@ cell15.y();
 CoordinateCell<MyCell> target = new CoordinateCell<>(map.get(42));
 cell15.directionTo(target); // Compute the direction between cells 15 and 42
 cell15.distance(target); // Compute the distance between the two cells
+```
+
+### [LineOfSight](src/main/java/fr/arakne/utils/maps/LineOfSight.java)
+
+Helper for check if a cell is accessible following the line of sight.
+
+Note: To works, the cells must implement [BattlefieldCell](src/main/java/fr/arakne/utils/maps/BattlefieldCell.java).
+
+```java
+// Decorate the map
+MapMap map = getMap();
+LineOfSight los = new LineOfSight(map);
+
+// Check the line of sight between two cells
+if (los.between(fighter.cell(), map.get(targetCell))) {
+    // The target cell is accessible from the fighter cell
+} else {
+    // Error : cell is not accessible
+}
 ```
 
 ### Constants

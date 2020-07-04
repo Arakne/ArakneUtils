@@ -1,4 +1,4 @@
-# Arakne Value
+# Arakne Value [![javadoc](https://javadoc.io/badge2/fr.arakne/arakne-value/javadoc.svg)](https://javadoc.io/doc/fr.arakne/arakne-value) [![Maven Central](https://img.shields.io/maven-central/v/fr.arakne/arakne-value)](https://search.maven.org/artifact/fr.arakne/arakne-value)
 
 Common data structure, constants and helpers for Dofus 1.29.
 

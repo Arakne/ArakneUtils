@@ -1,4 +1,4 @@
-# Arakne Encoding
+# Arakne Encoding [![javadoc](https://javadoc.io/badge2/fr.arakne/arakne-encoding/javadoc.svg)](https://javadoc.io/doc/fr.arakne/arakne-encoding)  [![Maven Central](https://img.shields.io/maven-central/v/fr.arakne/arakne-encoding)](https://search.maven.org/artifact/fr.arakne/arakne-encoding) 
 
 Common encoding algorithms used by Dofus 1.29 protocol.
 
@@ -58,4 +58,38 @@ socket.send(username + "\n#1" + encoder.encode(password));
 // Server side : decode the password
 // Note: the parameter must not contains the "#1" prefix
 account.verifyPassword(encoder.decode(encodedPassword));
+```
+
+### [XorCipher](src/main/java/fr/arakne/utils/encoding/XorCipher.java)
+
+Implementation of the cipher used by Dofus protocol and encrypted maps.
+
+Note: It's better to use higher level utilities like `EncryptedMapDataSerializer` instead of using manually the `XorCipher`.
+
+```java
+// Create the cipher with the parsed key
+XorCipher cipher = new XorCipher("my key");
+
+// Encrypt the data using the key and a key offset of 6
+String encrypted = cipher.encrypt("my data", 6);
+
+// Decrypt the received data. The key offset must be the same as the used on encrypted method
+String decrypted = cipher.decrypt(encrypted, 6); // "my data"
+```
+
+### [Key](src/main/java/fr/arakne/utils/encoding/Key.java)
+
+Handle the Dofus cipher key.
+
+```java
+// Server: generate a key and send to the client
+Key myKey = Key.generate();
+client.send("AK1" + myKey.encode());
+
+// Client : parse a received key
+Key myKey = Key.parse(ak.key());
+
+// Use cipher to encrypt and decrypt data
+myKey.cipher().decrypt(receivedData, offset);
+myKey.cipher().encrypt(dataToSend, offset);
 ```
