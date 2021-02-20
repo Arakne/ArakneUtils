@@ -11,15 +11,23 @@ build:
                       coverage:
                         file: 'arakne-encoding/target/site/jacoco/jacoco.xml'
                         format: 'jacoco'
+                    - command: mvn checkstyle:checkstyle -pl arakne-encoding
+                      analysis:
+                        file: 'arakne-encoding/target/checkstyle-result.xml'
+                        format: 'general-checkstyle'
                     - command: mvn test -pl arakne-value
                       coverage:
                         file: 'arakne-value/target/site/jacoco/jacoco.xml'
                         format: 'jacoco'
+                    - command: mvn checkstyle:checkstyle -pl arakne-value
+                      analysis:
+                        file: 'arakne-value/target/checkstyle-result.xml'
+                        format: 'general-checkstyle'
                     - command: mvn test -pl arakne-map
                       coverage:
                         file: 'arakne-map/target/site/jacoco/jacoco.xml'
                         format: 'jacoco'
-                    - command: 'mvn checkstyle:checkstyle'
+                    - command: mvn checkstyle:checkstyle -pl arakne-map
                       analysis:
-                        file: 'target/checkstyle-result.xml'
+                        file: 'arakne-map/target/checkstyle-result.xml'
                         format: 'general-checkstyle'

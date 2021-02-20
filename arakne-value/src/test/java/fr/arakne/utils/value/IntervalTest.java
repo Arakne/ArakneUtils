@@ -21,6 +21,8 @@ package fr.arakne.utils.value;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class IntervalTest {
@@ -42,6 +44,25 @@ class IntervalTest {
     }
 
     @Test
+    void average() {
+        assertEquals(12.5, new Interval(10, 15).average(), 0.001);
+    }
+
+    @Test
+    void amplitude() {
+        assertEquals(5, new Interval(10, 15).amplitude());
+        assertEquals(0, new Interval(10, 10).amplitude());
+        assertEquals(20, new Interval(0, 20).amplitude());
+        assertEquals(15, new Interval(-20, -5).amplitude());
+    }
+
+    @Test
+    void isSingleton() {
+        assertTrue(new Interval(5, 5).isSingleton());
+        assertFalse(new Interval(5, 6).isSingleton());
+    }
+
+    @Test
     void modify() {
         Interval interval = new Interval(5, 10);
 
@@ -54,6 +75,42 @@ class IntervalTest {
 
         assertSame(interval, interval.modify(-2));
         assertEquals(new Interval(5, 7), interval.modify(2));
+    }
+
+    @Test
+    void mapWithSingletonShouldCallOnceTransformer() {
+        AtomicInteger ai = new AtomicInteger();
+
+        Interval res = Interval.of(42).map(i -> {
+            ai.incrementAndGet();
+
+            return i * 2 + 2;
+        });
+
+        assertEquals(1, ai.get());
+        assertTrue(res.isSingleton());
+        assertEquals(86, res.max());
+    }
+
+    @Test
+    void map() {
+        AtomicInteger ai = new AtomicInteger();
+
+        Interval res = Interval.of(10, 20).map(i -> {
+            ai.incrementAndGet();
+
+            return i * 2 + 2;
+        });
+
+        assertEquals(2, ai.get());
+        assertEquals(new Interval(22, 42), res);
+    }
+
+    @Test
+    void mapShouldReorderTransformedBoundaries() {
+        Interval res = Interval.of(10, 20).map(i -> -i);
+
+        assertEquals(new Interval(-20, -10), res);
     }
 
     @Test
@@ -88,5 +145,18 @@ class IntervalTest {
     void hash() {
         assertEquals(new Interval(5, 7).hashCode(), new Interval(5, 7).hashCode());
         assertNotEquals(new Interval(5, 7).hashCode(), new Interval(4, 7).hashCode());
+    }
+
+    @Test
+    void ofSingleton() {
+        assertEquals(new Interval(42, 42), Interval.of(42));
+        assertTrue(Interval.of(42).isSingleton());
+    }
+
+    @Test
+    void of() {
+        assertEquals(new Interval(42, 42), Interval.of(42, 42));
+        assertEquals(new Interval(11, 42), Interval.of(11, 42));
+        assertEquals(new Interval(42, 55), Interval.of(55, 42));
     }
 }

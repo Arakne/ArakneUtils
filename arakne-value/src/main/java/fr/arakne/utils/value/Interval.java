@@ -14,12 +14,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ArakneUtils.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright (c) 2017-2020 Vincent Quatrevieux
+ * Copyright (c) 2017-2021 Vincent Quatrevieux
  */
 
 package fr.arakne.utils.value;
 
 import java.util.Objects;
+import java.util.function.IntUnaryOperator;
 
 /**
  * Integer interval, min and max included
@@ -65,6 +66,27 @@ public final class Interval {
     }
 
     /**
+     * Compute the average value of the interface
+     * The average is `min + max / 2`
+     *
+     * @return The average, in double
+     */
+    public double average() {
+        return (min + max) / 2d;
+    }
+
+    /**
+     * Compute the interval amplitude
+     * The amplitude is the size of the interval (i.e. `max - min`)
+     * If the interval is a singleton, the amplitude is 0
+     *
+     * @return The amplitude. Must be a positive integer
+     */
+    public int amplitude() {
+        return max - min;
+    }
+
+    /**
      * Check if the value is contained into the interval
      * The interval is inclusive
      *
@@ -74,6 +96,15 @@ public final class Interval {
      */
     public boolean contains(int value) {
         return value >= min && value <= max;
+    }
+
+    /**
+     * Check if the current interval is a singleton (i.e. `min == max`)
+     *
+     * @return true if it's a singleton
+     */
+    public boolean isSingleton() {
+        return min == max;
     }
 
     /**
@@ -91,6 +122,26 @@ public final class Interval {
         }
 
         return new Interval(min, Math.max(max + modifier, min));
+    }
+
+    /**
+     * Apply value transformer to the interval boundaries
+     * If the Interval is a singleton, the transformer will be applied only once
+     * The transformer may change the boundary order (ex: if the transformer reverse values), the result Interval will be reordered
+     *
+     * @param transformer The boundary transformation process
+     *
+     * @return The new transformed interval
+     */
+    public Interval map(IntUnaryOperator transformer) {
+        if (isSingleton()) {
+            return Interval.of(transformer.applyAsInt(min));
+        }
+
+        return Interval.of(
+            transformer.applyAsInt(min),
+            transformer.applyAsInt(max)
+        );
     }
 
     @Override
@@ -112,5 +163,33 @@ public final class Interval {
     @Override
     public int hashCode() {
         return Objects.hash(min, max);
+    }
+
+    /**
+     * Create a singleton interval
+     *
+     * @param value The interval value
+     *
+     * @return The new Interval instance
+     */
+    public static Interval of(int value) {
+        return new Interval(value, value);
+    }
+
+    /**
+     * Create an interval with unordered boundaries
+     * The two boundaries will be ordered to create a valid interval
+     *
+     * @param a First boundary of the interval
+     * @param b Second boundary of the interval
+     *
+     * @return The new Interval instance
+     */
+    public static Interval of(int a, int b) {
+        if (a > b) {
+            return new Interval(b, a);
+        }
+
+        return new Interval(a, b);
     }
 }
