@@ -30,8 +30,8 @@ import java.nio.charset.StandardCharsets;
  *
  * https://github.com/Emudofus/Dofus/blob/1.29/dofus/aks/Aks.as#L297
  */
-final public class XorCipher {
-    final private String key;
+public final class XorCipher {
+    private final String key;
 
     public XorCipher(String key) {
         this.key = key;
@@ -58,11 +58,11 @@ final public class XorCipher {
      * @return Encrypted value
      */
     public String encrypt(String value, int keyOffset) {
-        value = escape(value);
-        StringBuilder encrypted = new StringBuilder(value.length() * 2);
+        final String plain = escape(value);
+        final StringBuilder encrypted = new StringBuilder(plain.length() * 2);
 
-        for (int i = 0; i < value.length(); ++i) {
-            final char c = value.charAt(i);
+        for (int i = 0; i < plain.length(); ++i) {
+            final char c = plain.charAt(i);
             final char k = key.charAt((i + keyOffset) % key.length());
 
             final char e = (char) (c ^ k);
@@ -95,7 +95,7 @@ final public class XorCipher {
             throw new IllegalArgumentException("Invalid encrypted value");
         }
 
-        char[] decrypted = new char[value.length() / 2];
+        final char[] decrypted = new char[value.length() / 2];
 
         for (int i = 0; i < value.length(); i += 2) {
             final char k = key.charAt((i / 2 + keyOffset) % key.length());
@@ -116,8 +116,8 @@ final public class XorCipher {
      *
      * https://github.com/Emudofus/Dofus/blob/1.29/dofus/aks/Aks.as#L275
      */
-    static private String escape(String value) {
-        StringBuilder escaped = new StringBuilder(value.length());
+    private static String escape(String value) {
+        final StringBuilder escaped = new StringBuilder(value.length());
 
         try {
             for (int i = 0; i < value.length(); ++i) {

@@ -28,10 +28,10 @@ import java.util.Objects;
  *
  * @param <M> The DofusMap class
  */
-abstract public class AbstractCellDataAdapter<M extends DofusMap<?>> implements MapCell {
-    final protected CellData data;
-    final private M map;
-    final private int id;
+public abstract class AbstractCellDataAdapter<M extends DofusMap<?>> implements MapCell {
+    protected final CellData data;
+    private final M map;
+    private final int id;
 
     /**
      * @param map The container map
@@ -45,17 +45,17 @@ abstract public class AbstractCellDataAdapter<M extends DofusMap<?>> implements 
     }
 
     @Override
-    final public int id() {
+    public final int id() {
         return id;
     }
 
     @Override
-    final public boolean walkable() {
+    public final boolean walkable() {
         return data.active() && data.movement().walkable();
     }
 
     @Override
-    final public M map() {
+    public final M map() {
         return map;
     }
 
@@ -69,7 +69,7 @@ abstract public class AbstractCellDataAdapter<M extends DofusMap<?>> implements 
             return false;
         }
 
-        AbstractCellDataAdapter<?> that = (AbstractCellDataAdapter<?>) o;
+        final AbstractCellDataAdapter<?> that = (AbstractCellDataAdapter<?>) o;
 
         return id == that.id && map == that.map;
     }

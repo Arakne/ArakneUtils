@@ -26,6 +26,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CoordinateCellTest {
     private MyDofusMap map;
@@ -96,5 +99,29 @@ class CoordinateCellTest {
         assertEquals(0, cell.distance(cell));
         assertEquals(5, cell.distance(new CoordinateCell<>(map.get(227))));
         assertEquals(24, cell.distance(new CoordinateCell<>(map.get(0))));
+    }
+
+    @Test
+    void is() {
+        CoordinateCell<MyDofusCell> cell = new CoordinateCell<>(map.get(157));
+
+        assertTrue(cell.is(17, -7));
+        assertFalse(cell.is(18, -7));
+        assertFalse(cell.is(17, -8));
+        assertFalse(cell.is(18, -8));
+    }
+
+    @Test
+    void equalsAndHashCode() {
+        CoordinateCell<MyDofusCell> cell = new CoordinateCell<>(map.get(157));
+
+        assertEquals(cell, cell);
+        assertEquals(cell.hashCode(), cell.hashCode());
+        assertEquals(cell.hashCode(), new CoordinateCell<>(map.get(157)).hashCode());
+
+        assertNotEquals(cell, null);
+        assertNotEquals(cell, new Object());
+        assertNotEquals(cell, new CoordinateCell<>(map.get(127)));
+        assertNotEquals(cell.hashCode(), new CoordinateCell<>(map.get(127)).hashCode());
     }
 }

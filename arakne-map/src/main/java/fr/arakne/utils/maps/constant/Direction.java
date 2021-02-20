@@ -38,14 +38,14 @@ public enum Direction {
     /**
      * Array of restricted directions (can be used on fight)
      */
-    final static private Direction[] restricted = Arrays.stream(values()).filter(Direction::restricted).toArray(Direction[]::new);
+    private static final Direction[] restricted = Arrays.stream(values()).filter(Direction::restricted).toArray(Direction[]::new);
 
     /**
      * Cache values
      */
-    final static private Direction[] values = values();
+    private static final Direction[] values = values();
 
-    final private Function<Integer, Integer> computeNextCell;
+    private final Function<Integer, Integer> computeNextCell;
 
     /**
      * @param computeNextCell The function for compute the next cell id following the direction
@@ -59,7 +59,7 @@ public enum Direction {
      *
      * @return The direction char value
      */
-    public char toChar(){
+    public char toChar() {
         return (char) (ordinal() + 'a');
     }
 
@@ -68,7 +68,7 @@ public enum Direction {
      *
      * @return The direction
      */
-    public Direction opposite(){
+    public Direction opposite() {
         return values[(ordinal() + 4) % 8];
     }
 
@@ -114,7 +114,7 @@ public enum Direction {
      * @param c The direction character value
      * @return The direction
      */
-    static public Direction byChar(char c) {
+    public static Direction byChar(char c) {
         return values[c - 'a'];
     }
 
@@ -124,7 +124,7 @@ public enum Direction {
      *
      * @return The array of Direction
      */
-    static public Direction[] restrictedDirections() {
+    public static Direction[] restrictedDirections() {
         return restricted.clone();
     }
 }

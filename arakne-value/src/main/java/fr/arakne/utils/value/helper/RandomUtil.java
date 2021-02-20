@@ -21,7 +21,11 @@ package fr.arakne.utils.value.helper;
 
 import fr.arakne.utils.value.Interval;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Utility for random numbers
@@ -33,12 +37,12 @@ import java.util.*;
  * Each objects instance should have its own RandomUtil instance
  * But in case of short-life objects static instance of RandomUtil can be used when created using {@link RandomUtil#createShared()}
  */
-final public class RandomUtil extends Random {
+public final class RandomUtil extends Random {
     /**
      * Testing mode ?
      * If set to true, the seed value will be fixed and random will be predictable
      */
-    static private boolean testing = false;
+    private static boolean testing = false;
 
     /**
      * List of instance which are shared between instances
@@ -46,7 +50,7 @@ final public class RandomUtil extends Random {
      *
      * @see RandomUtil#createShared()
      */
-    final static private Collection<RandomUtil> sharedInstances = new ArrayList<>();
+    private static final Collection<RandomUtil> sharedInstances = new ArrayList<>();
 
     public RandomUtil() {
         if (testing) {
@@ -165,7 +169,7 @@ final public class RandomUtil extends Random {
      *
      * @return One of the element of the array
      */
-    public<T> T of(T[] values) {
+    public <T> T of(T[] values) {
         return values[nextInt(values.length)];
     }
 
@@ -191,7 +195,7 @@ final public class RandomUtil extends Random {
      *
      * @return One of the element of the list
      */
-    public<T> T of(List<T> values) {
+    public <T> T of(List<T> values) {
         return values.get(nextInt(values.size()));
     }
 
@@ -204,8 +208,8 @@ final public class RandomUtil extends Random {
      *
      * @return The randomized list
      */
-    public<T> List<T> shuffle(List<T> list) {
-        List<T> shuffled = new ArrayList<>(list);
+    public <T> List<T> shuffle(List<T> list) {
+        final List<T> shuffled = new ArrayList<>(list);
 
         Collections.shuffle(shuffled, this);
 
@@ -218,8 +222,8 @@ final public class RandomUtil extends Random {
      *
      * @return A new RandomUtil instance
      */
-    static public RandomUtil createShared() {
-        RandomUtil random = new RandomUtil();
+    public static RandomUtil createShared() {
+        final RandomUtil random = new RandomUtil();
 
         sharedInstances.add(random);
 
@@ -230,7 +234,7 @@ final public class RandomUtil extends Random {
      * Enable the testing mode for get predictable random values
      * This method MUST NOT be used outside tests
      */
-    static public void enableTestingMode() {
+    public static void enableTestingMode() {
         testing = true;
 
         // Reset the random state

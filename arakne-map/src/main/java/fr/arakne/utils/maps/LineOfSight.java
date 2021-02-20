@@ -35,9 +35,9 @@ package fr.arakne.utils.maps;
  *
  * @param <C> The battlefield cell type
  */
-final public class LineOfSight<C extends BattlefieldCell> {
-    final private DofusMap<C> battlefield;
-    final private int width; // store map width for optimisation
+public final class LineOfSight<C extends BattlefieldCell> {
+    private final DofusMap<C> battlefield;
+    private final int width; // store map width for optimisation
 
     public LineOfSight(DofusMap<C> battlefield) {
         this.battlefield = battlefield;
@@ -65,7 +65,12 @@ final public class LineOfSight<C extends BattlefieldCell> {
      * @return true if target is not blocked
      */
     public boolean between(CoordinateCell<C> source, CoordinateCell<C> target) {
-        if (source.x() == target.x() && source.y() == target.y()) {
+        // Swap source and target to ensure that source.x < target.x
+        if (source.x() > target.x()) {
+            return between(target, source);
+        }
+
+        if (source.equals(target)) {
             return true;
         }
 
@@ -73,55 +78,7 @@ final public class LineOfSight<C extends BattlefieldCell> {
             return checkWithSameX(source, target);
         }
 
-        // Swap source and target to ensure that source.x < target.x
-        if (source.x() > target.x()) {
-            final CoordinateCell<C> tmp = source;
-
-            source = target;
-            target = tmp;
-        }
-
-        final int yDirection = source.y() > target.y() ? -1 : 1;
-        final double ySlope = (double) (target.y() - source.y()) / (double) (target.x() - source.x());
-        final double yAtZero = source.y() - ySlope * source.x();
-
-        int currentY = source.y();
-
-        // For every X between source and target
-        for (int currentX = source.x(); currentX <= target.x(); ++currentX) {
-            // yMax is the value of Y at the current X
-            int yMax = (int) Math.round((currentX + 0.5) * ySlope + yAtZero);
-
-            for (;;) {
-                // target is reached : do not check it's LoS
-                if (currentX == target.x() && currentY == target.y()) {
-                    return true;
-                }
-
-                // Ignore the source LoS
-                if (currentX != source.x() || currentY != source.y()) {
-                    if (cellSightBlocking(currentX, currentY)) {
-                        return false;
-                    }
-                }
-
-                // Increment Y until yMax is reached
-                if (currentY == yMax) {
-                    break;
-                }
-
-                currentY += yDirection;
-            }
-        }
-
-        // Increments Y until target is reached
-        for (; yDirection > 0 ? currentY < target.y() : currentY > target.y(); currentY += yDirection) {
-            if (cellSightBlocking(target.x(), currentY)) {
-                return false;
-            }
-        }
-
-        return true;
+        return checkNotAlignedCells(source, target);
     }
 
     /**
@@ -145,16 +102,67 @@ final public class LineOfSight<C extends BattlefieldCell> {
      * Check line of sight with aligned cells
      */
     private boolean checkWithSameX(CoordinateCell<C> source, CoordinateCell<C> target) {
-        final int startY = Math.min(source.y(), target.y());
-        final int endY = Math.max(source.y(), target.y());
+        return checkWithSameX(target.x(), source.y(), target.y());
+    }
+
+    /**
+     * Check line of sight with aligned cells coordinates
+     */
+    private boolean checkWithSameX(int x, int y1, int y2) {
+        final int startY = Math.min(y1, y2);
+        final int endY = Math.max(y1, y2);
 
         // Ignore the first and last cells
         for (int currentY = startY + 1; currentY < endY; ++currentY) {
-            if (cellSightBlocking(target.x(), currentY)) {
+            if (cellSightBlocking(x, currentY)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    /**
+     * Check line of between two not aligned cells
+     *
+     * @param source The source cell. source.x() must be lower that target.x()
+     * @param target The target cell
+     *
+     * @return true if the line of sight is free
+     */
+    private boolean checkNotAlignedCells(CoordinateCell<C> source, CoordinateCell<C> target) {
+        final int yDirection = source.y() > target.y() ? -1 : 1;
+        final double ySlope = (double) (target.y() - source.y()) / (double) (target.x() - source.x());
+        final double yAtZero = source.y() - ySlope * source.x();
+
+        int currentY = source.y();
+
+        // For every X between source and target
+        for (int currentX = source.x(); currentX <= target.x(); ++currentX) {
+            // yMax is the value of Y at the current X
+            final int yMax = (int) Math.round((currentX + 0.5) * ySlope + yAtZero);
+
+            for (;;) {
+                // target is reached : do not check it's LoS
+                if (target.is(currentX, currentY)) {
+                    return true;
+                }
+
+                // Ignore the source LoS
+                if (!source.is(currentX, currentY) && cellSightBlocking(currentX, currentY)) {
+                    return false;
+                }
+
+                // Increment Y until yMax is reached
+                if (currentY == yMax) {
+                    break;
+                }
+
+                currentY += yDirection;
+            }
+        }
+
+        // target X == current X : increments Y until target is reached
+        return checkWithSameX(target.x(), currentY, target.y());
     }
 }

@@ -24,7 +24,7 @@ package fr.arakne.utils.encoding;
  *
  * https://github.com/Emudofus/Dofus/blob/1.29/dofus/aks/Aks.as#L248
  */
-final public class Checksum {
+public final class Checksum {
     /**
      * Utility class : disable constructor
      */
@@ -38,7 +38,7 @@ final public class Checksum {
      *
      * @return The checksum of value
      */
-    static public int integer(String value) {
+    public static int integer(String value) {
         int checksum = 0;
 
         for (int i = 0; i < value.length(); ++i) {
@@ -56,7 +56,7 @@ final public class Checksum {
      *
      * @return The checksum of value
      */
-    static public String hexadecimal(String value) {
+    public static String hexadecimal(String value) {
         return Integer.toHexString(integer(value)).toUpperCase();
     }
 
@@ -68,7 +68,7 @@ final public class Checksum {
      *
      * @return true if checksum match
      */
-    static public boolean verify(String input, int expectedChecksum) {
+    public static boolean verify(String input, int expectedChecksum) {
         return integer(input) == expectedChecksum;
     }
 
@@ -80,7 +80,7 @@ final public class Checksum {
      *
      * @return true if checksum match
      */
-    static public boolean verify(String input, String expectedChecksum) {
+    public static boolean verify(String input, String expectedChecksum) {
         return integer(input) == Integer.parseInt(expectedChecksum, 16);
     }
 }

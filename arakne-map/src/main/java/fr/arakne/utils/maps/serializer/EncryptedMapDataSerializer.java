@@ -34,9 +34,9 @@ import fr.arakne.utils.encoding.Key;
  *
  * https://github.com/Emudofus/Dofus/blob/1.29/dofus/managers/MapsServersManager.as#L137
  */
-final public class EncryptedMapDataSerializer implements MapDataSerializer {
-    final private Key key;
-    final private MapDataSerializer plainDataSerializer;
+public final class EncryptedMapDataSerializer implements MapDataSerializer {
+    private final Key key;
+    private final MapDataSerializer plainDataSerializer;
 
     public EncryptedMapDataSerializer(Key key) {
         this(key, new DefaultMapDataSerializer());

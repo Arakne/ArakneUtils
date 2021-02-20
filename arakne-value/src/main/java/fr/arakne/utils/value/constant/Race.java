@@ -40,7 +40,7 @@ public enum Race {
     /**
      * Cache values
      */
-    final static private Race[] values = values();
+    private static final Race[] values = values();
 
     /**
      * Get a character race by its id
@@ -50,7 +50,7 @@ public enum Race {
      *
      * @throws IndexOutOfBoundsException When an invalid id is given
      */
-    static public Race byId(int id) {
+    public static Race byId(int id) {
         if (id >= values.length || id == 0) {
             throw new IndexOutOfBoundsException("Invalid race " + id);
         }

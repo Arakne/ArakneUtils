@@ -69,7 +69,7 @@ public enum CellMovement {
     /**
      * Cache the movement values
      */
-    final static private CellMovement[] values = values();
+    private static final CellMovement[] values = values();
 
     /**
      * Check if the current movement is for a walkable cell
@@ -86,7 +86,7 @@ public enum CellMovement {
      * @param value The movement id
      * @return The movement item
      */
-    static public CellMovement byValue(int value) {
+    public static CellMovement byValue(int value) {
         return values[value];
     }
 }

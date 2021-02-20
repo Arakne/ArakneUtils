@@ -31,9 +31,9 @@ import java.util.function.Predicate;
  * Path for dofus map
  * @param <C> The cell type
  */
-final public class Path<C extends MapCell> implements Collection<PathStep<C>> {
-    final private Decoder<C> decoder;
-    final private List<PathStep<C>> steps;
+public final class Path<C extends MapCell> implements Collection<PathStep<C>> {
+    private final Decoder<C> decoder;
+    private final List<PathStep<C>> steps;
 
     /**
      * @param decoder The decoder instance
@@ -129,7 +129,7 @@ final public class Path<C extends MapCell> implements Collection<PathStep<C>> {
      * @return The new path instance
      */
     public Path<C> keepWhile(Predicate<PathStep<C>> condition) {
-        Path<C> newPath = new Path<>(decoder, new ArrayList<>(size()));
+        final Path<C> newPath = new Path<>(decoder, new ArrayList<>(size()));
 
         for (PathStep<C> step : steps) {
             if (!condition.test(step)) {

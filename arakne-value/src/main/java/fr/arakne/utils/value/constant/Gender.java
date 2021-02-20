@@ -33,8 +33,8 @@ public enum Gender {
      *
      * @return The Gender
      */
-    static public Gender parse(String value) {
-        if (value.equals("0")) {
+    public static Gender parse(String value) {
+        if ("0".equals(value)) {
             return MALE;
         }
 

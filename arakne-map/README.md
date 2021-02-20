@@ -75,9 +75,9 @@ Implements the DofusMap :
 ```java
 // Must implements DofusMap with the cell type as template parameter
 public class MyMap implements DofusMap<MyCell> {
-    final private int id;
-    final private MyCell[] cell;
-    final private Dimensions dimensions;
+    private final int id;
+    private final MyCell[] cell;
+    private final Dimensions dimensions;
     // Other map fields...
 
     public MyMap(int id, CellData[] data, Dimensions dimensions) {

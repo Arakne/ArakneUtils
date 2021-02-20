@@ -27,9 +27,9 @@ import java.util.Objects;
  *
  * Note: This is an immutable value object
  */
-final public class Interval {
-    final private int min;
-    final private int max;
+public final class Interval {
+    private final int min;
+    private final int max;
 
     /**
      * @param min Minimal value of the interval
@@ -85,8 +85,7 @@ final public class Interval {
      *
      * @return The new interval
      */
-    public Interval modify(int modifier)
-    {
+    public Interval modify(int modifier) {
         if (modifier == 0 || (min == max && modifier < 0)) {
             return this;
         }
@@ -105,7 +104,7 @@ final public class Interval {
             return false;
         }
 
-        Interval other = (Interval) obj;
+        final Interval other = (Interval) obj;
 
         return other.min == min && other.max == max;
     }

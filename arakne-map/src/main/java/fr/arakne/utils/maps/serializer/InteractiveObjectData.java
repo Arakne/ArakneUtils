@@ -27,7 +27,7 @@ public interface InteractiveObjectData extends CellLayerData {
      * Rotation is not supported by the layerObject2
      */
     @Override
-    default public int rotation() {
+    public default int rotation() {
         return 0;
     }
 

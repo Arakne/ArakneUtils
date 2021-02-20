@@ -21,16 +21,18 @@ package fr.arakne.utils.maps;
 
 import fr.arakne.utils.maps.constant.Direction;
 
+import java.util.Objects;
+
 /**
  * Map cell with coordinates
  *
  * https://github.com/Emudofus/Dofus/blob/1.29/ank/battlefield/utils/Pathfinding.as#L191
  */
-final public class CoordinateCell<C extends MapCell> {
-    final private C cell;
+public final class CoordinateCell<C extends MapCell> {
+    private final C cell;
 
-    final private int x;
-    final private int y;
+    private final int x;
+    private final int y;
 
     /**
      * @param cell The cell to wrap
@@ -38,13 +40,13 @@ final public class CoordinateCell<C extends MapCell> {
     public CoordinateCell(C cell) {
         this.cell = cell;
 
-        int _loc4 = cell.map().dimensions().width();
-        int _loc5 = cell.id() / (_loc4 * 2 - 1);
-        int _loc6 = cell.id() - _loc5 * (_loc4 * 2 - 1);
-        int _loc7 = _loc6 % _loc4;
+        final int width = cell.map().dimensions().width();
+        final int line = cell.id() / (width * 2 - 1);
+        final int column = cell.id() - line * (width * 2 - 1);
+        final int offset = column % width;
 
-        this.y = _loc5 - _loc7;
-        this.x = (cell.id() - (_loc4 - 1) * this.y) / _loc4;
+        this.y = line - offset;
+        this.x = (cell.id() - (width - 1) * this.y) / width;
     }
 
     /**
@@ -80,6 +82,18 @@ final public class CoordinateCell<C extends MapCell> {
     }
 
     /**
+     * Check if the cell is at the given coordinates
+     *
+     * @param x The X coordinate
+     * @param y The Y coordinate
+     *
+     * @return true if coordinates match, or false otherwise
+     */
+    public boolean is(int x, int y) {
+        return this.x == x && this.y == y;
+    }
+
+    /**
      * Compute the direction to the target cell
      *
      * https://github.com/Emudofus/Dofus/blob/1.29/ank/battlefield/utils/Pathfinding.as#L204
@@ -111,5 +125,25 @@ final public class CoordinateCell<C extends MapCell> {
      */
     public int distance(CoordinateCell<C> target) {
         return Math.abs(x - target.x) + Math.abs(y - target.y);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final CoordinateCell<?> that = (CoordinateCell<?>) o;
+
+        return x == that.x && y == that.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 }

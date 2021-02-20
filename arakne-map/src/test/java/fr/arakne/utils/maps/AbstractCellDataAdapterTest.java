@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AbstractCellDataAdapterTest {
     class MyDofusMap implements DofusMap<MyDofusCell> {
-        final private CellData[] cells;
+        private final CellData[] cells;
 
         public MyDofusMap(CellData[] cells) {
             this.cells = cells;

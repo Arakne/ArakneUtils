@@ -19,7 +19,6 @@
 
 package fr.arakne.utils.maps.path;
 
-
 import fr.arakne.utils.encoding.Base64;
 import fr.arakne.utils.maps.DofusMap;
 import fr.arakne.utils.maps.MapCell;
@@ -30,8 +29,8 @@ import java.util.Optional;
 /**
  * Decode map data like paths or directions
  */
-final public class Decoder<C extends MapCell> {
-    final private DofusMap<C> map;
+public final class Decoder<C extends MapCell> {
+    private final DofusMap<C> map;
 
     /**
      * @param map The map to handle
@@ -50,7 +49,7 @@ final public class Decoder<C extends MapCell> {
      * @return The next cell, wrapped into an optional. If the next cell is outside map, return an empty optional
      */
     public Optional<C> nextCellByDirection(C start, Direction direction) {
-        int nextId = start.id() + direction.nextCellIncrement(map.dimensions().width());
+        final int nextId = start.id() + direction.nextCellIncrement(map.dimensions().width());
 
         if (nextId >= map.size() || nextId < 0) {
             return Optional.empty();

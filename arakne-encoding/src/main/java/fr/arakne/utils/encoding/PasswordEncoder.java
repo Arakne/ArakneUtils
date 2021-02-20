@@ -36,8 +36,8 @@ package fr.arakne.utils.encoding;
  *
  * https://github.com/Emudofus/Dofus/blob/1.29/ank/utils/Crypt.as#L20
  */
-final public class PasswordEncoder {
-    final private String key;
+public final class PasswordEncoder {
+    private final String key;
 
     /**
      * @param key The key to use. It must be long enough to encode the password.
@@ -73,12 +73,12 @@ final public class PasswordEncoder {
             throw new IllegalArgumentException("Encoded string is too long for the key");
         }
 
-        char[] decoded = new char[encoded.length() / 2];
+        final char[] decoded = new char[encoded.length() / 2];
 
         // Iterate over pair chars
         for (int i = 0; i < encoded.length(); i += 2) {
-            int p = i / 2;
-            int k = key.charAt(p) % 64; // Get key char
+            final int p = i / 2;
+            final int k = key.charAt(p) % 64; // Get key char
 
             // Get two chars int value (divider and modulo)
             int d = Base64.ord(encoded.charAt(i));
@@ -89,11 +89,16 @@ final public class PasswordEncoder {
             r -= k;
 
             // if values are negative (due to modulo), reverse the module
-            while (d < 0) { d += 64; }
-            while (r < 0) { r += 64; }
+            while (d < 0) {
+                d += 64;
+            }
+
+            while (r < 0) {
+                r += 64;
+            }
 
             // retrieve the original value
-            int v = d * 16 + r;
+            final int v = d * 16 + r;
 
             decoded[p] = (char) v;
         }
@@ -114,16 +119,16 @@ final public class PasswordEncoder {
             throw new IllegalArgumentException("The password is too long for the key");
         }
 
-        char[] encoded = new char[password.length() * 2];
+        final char[] encoded = new char[password.length() * 2];
 
         for (int i = 0; i < password.length(); ++i) {
             // Password char and key
-            char c = password.charAt(i);
-            char k = key.charAt(i);
+            final char c = password.charAt(i);
+            final char k = key.charAt(i);
 
             // Get the divider and modulo values
-            int d = c / 16;
-            int r = c % 16;
+            final int d = c / 16;
+            final int r = c % 16;
 
             // Encode into base64
             encoded[i * 2] = Base64.chrMod(d + k);

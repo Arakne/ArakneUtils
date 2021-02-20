@@ -49,7 +49,7 @@ public interface CellLayerData {
      *
      * @return bool
      */
-    default public boolean active() {
+    public default boolean active() {
         return number() != 0;
     }
 }

@@ -25,7 +25,7 @@ import fr.arakne.utils.maps.serializer.DefaultMapDataSerializer;
 import fr.arakne.utils.value.Dimensions;
 
 public class MyDofusMap implements DofusMap<MyDofusCell> {
-    final private CellData[] cells;
+    private final CellData[] cells;
 
     public MyDofusMap(CellData[] cells) {
         this.cells = cells;
@@ -46,7 +46,7 @@ public class MyDofusMap implements DofusMap<MyDofusCell> {
         return new Dimensions(15, 17);
     }
 
-    static public MyDofusMap parse(String mapData) {
+    public static MyDofusMap parse(String mapData) {
         return new MyDofusMap(new DefaultMapDataSerializer().deserialize(mapData));
     }
 }

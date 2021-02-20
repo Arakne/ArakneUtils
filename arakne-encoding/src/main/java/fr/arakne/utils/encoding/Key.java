@@ -28,10 +28,10 @@ import java.security.SecureRandom;
 /**
  * Handle key for Dofus packets
  */
-final public class Key {
-    static private SecureRandom random;
+public final class Key {
+    private static SecureRandom random;
 
-    final private String key;
+    private final String key;
     private XorCipher cipher;
 
     public Key(String key) {
@@ -72,7 +72,7 @@ final public class Key {
             throw new IllegalStateException("Invalid UTF-8 key", e);
         }
 
-        StringBuilder encrypted = new StringBuilder(raw.length() * 2);
+        final StringBuilder encrypted = new StringBuilder(raw.length() * 2);
 
         for (int i = 0; i < raw.length(); ++i) {
             final char c = raw.charAt(i);
@@ -101,7 +101,7 @@ final public class Key {
      *
      * @see Key#encode() For generate the hexadecimal string
      */
-    static public Key parse(String input) {
+    public static Key parse(String input) {
         if (input.length() % 2 != 0) {
             throw new IllegalArgumentException("Invalid key");
         }
@@ -125,7 +125,7 @@ final public class Key {
      *
      * @return The generated key
      */
-    static public Key generate() {
+    public static Key generate() {
         return generate(128);
     }
 
@@ -137,7 +137,7 @@ final public class Key {
      *
      * @return The generated key
      */
-    static public Key generate(int size) {
+    public static Key generate(int size) {
         if (random == null) {
             random = new SecureRandom();
         }
@@ -154,7 +154,7 @@ final public class Key {
      *
      * @return The generated key
      */
-    static public Key generate(int size, SecureRandom random) {
+    public static Key generate(int size, SecureRandom random) {
         final char[] keyArr = new char[size];
 
         for (int i = 0; i < size; ++i) {

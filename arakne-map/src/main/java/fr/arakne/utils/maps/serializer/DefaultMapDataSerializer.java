@@ -31,11 +31,120 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * https://github.com/Emudofus/Dofus/blob/1.29/ank/battlefield/utils/Compressor.as#L54
  */
-final public class DefaultMapDataSerializer implements MapDataSerializer {
-    final static private int CELL_DATA_LENGTH = 10;
+public final class DefaultMapDataSerializer implements MapDataSerializer {
+    private static final int CELL_DATA_LENGTH = 10;
+
+    private Map<String, ByteArrayCell> cache;
+
+    @Override
+    public CellData[] deserialize(String mapData) {
+        if (mapData.length() % CELL_DATA_LENGTH != 0) {
+            throw new IllegalArgumentException("Invalid map data");
+        }
+
+        final int size = mapData.length() / CELL_DATA_LENGTH;
+        final CellData[] cells = new CellData[size];
+
+        for (int i = 0; i < size; ++i) {
+            cells[i] = deserializeCell(mapData.substring(i * CELL_DATA_LENGTH, (i + 1) * CELL_DATA_LENGTH));
+        }
+
+        return cells;
+    }
+
+    @Override
+    public String serialize(CellData[] cells) {
+        final StringBuilder sb = new StringBuilder(cells.length * CELL_DATA_LENGTH);
+
+        for (CellData cell : cells) {
+            sb.append(serializeCell(cell));
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * Enable the cell data cache
+     * Once enable, deserialize two same cell data will return the same cell instance
+     */
+    public void enableCache() {
+        cache = new ConcurrentHashMap<>();
+    }
+
+    /**
+     * Disable cell data cache
+     */
+    public void disableCache() {
+        cache = null;
+    }
+
+    /**
+     * Get a MapDataSerializer for encrypted map with the given key
+     * Use the current serializer as inner serializer (and also use the current cache)
+     *
+     * @param key The encryption key
+     *
+     * @return The map serializer
+     */
+    public MapDataSerializer withKey(Key key) {
+        return new EncryptedMapDataSerializer(key, this);
+    }
+
+    /**
+     * Get a MapDataSerializer for encrypted map with the given key
+     * This is equivalent to `serializer.withKey(Key.parse(key));`
+     *
+     * <code>
+     *     CellData[] cells = serializer.withKey(gdm.key()).deserialize(mapData);
+     * </code>
+     *
+     * @param key The encryption key as string
+     *
+     * @return The map serializer
+     */
+    public MapDataSerializer withKey(String key) {
+        return withKey(Key.parse(key));
+    }
+
+    private CellData deserializeCell(String cellData) {
+        if (cache == null) {
+            return new ByteArrayCell(Base64.toBytes(cellData));
+        }
+
+        return cache.computeIfAbsent(cellData, data -> new ByteArrayCell(Base64.toBytes(data)));
+    }
+
+    private String serializeCell(CellData cell) {
+        final byte[] data = new byte[CELL_DATA_LENGTH];
+
+        data[0] = (byte) ((cell.active() ? (1) : (0)) << 5);
+        data[0] = (byte) (data[0] | (cell.lineOfSight() ? (1) : (0)));
+        data[0] = (byte) (data[0] | (cell.ground().number() & 1536) >> 6);
+        data[0] = (byte) (data[0] | (cell.layer1().number() & 8192) >> 11);
+        data[0] = (byte) (data[0] | (cell.layer2().number() & 8192) >> 12);
+        data[1] = (byte) ((cell.ground().rotation() & 3) << 4);
+        data[1] = (byte) (data[1] | cell.ground().level() & 15);
+        data[2] = (byte) ((cell.movement().ordinal() & 7) << 3);
+        data[2] = (byte) (data[2] | cell.ground().number() >> 6 & 7);
+        data[3] = (byte) (cell.ground().number() & 63);
+        data[4] = (byte) ((cell.ground().slope() & 15) << 2);
+        data[4] = (byte) (data[4] | (cell.ground().flip() ? (1) : (0)) << 1);
+        data[4] = (byte) (data[4] | cell.layer1().number() >> 12 & 1);
+        data[5] = (byte) (cell.layer1().number() >> 6 & 63);
+        data[6] = (byte) (cell.layer1().number() & 63);
+        data[7] = (byte) ((cell.layer1().rotation() & 3) << 4);
+        data[7] = (byte) (data[7] | (cell.layer1().flip() ? (1) : (0)) << 3);
+        data[7] = (byte) (data[7] | (cell.layer2().flip() ? (1) : (0)) << 2);
+        data[7] = (byte) (data[7] | (cell.layer2().interactive() ? (1) : (0)) << 1);
+        data[7] = (byte) (data[7] | cell.layer2().number() >> 12 & 1);
+        data[8] = (byte) (cell.layer2().number() >> 6 & 63);
+        data[9] = (byte) (cell.layer2().number() & 63);
+
+        return Base64.encode(data);
+    }
 
     private static class ByteArrayCell implements CellData {
-        final private byte[] data;
+        private final byte[] data;
 
         public ByteArrayCell(byte[] data) {
             this.data = data;
@@ -125,114 +234,5 @@ final public class DefaultMapDataSerializer implements MapDataSerializer {
                 }
             };
         }
-    }
-
-    private Map<String, ByteArrayCell> cache;
-
-    @Override
-    public CellData[] deserialize(String mapData) {
-        if (mapData.length() % CELL_DATA_LENGTH != 0) {
-            throw new IllegalArgumentException("Invalid map data");
-        }
-
-        final int size = mapData.length() / CELL_DATA_LENGTH;
-        final CellData[] cells = new CellData[size];
-
-        for (int i = 0; i < size; ++i) {
-            cells[i] = deserializeCell(mapData.substring(i * CELL_DATA_LENGTH, (i + 1) * CELL_DATA_LENGTH));
-        }
-
-        return cells;
-    }
-
-    @Override
-    public String serialize(CellData[] cells) {
-        StringBuilder sb = new StringBuilder(cells.length * CELL_DATA_LENGTH);
-
-        for (CellData cell : cells) {
-            sb.append(serializeCell(cell));
-        }
-
-        return sb.toString();
-    }
-
-    /**
-     * Enable the cell data cache
-     * Once enable, deserialize two same cell data will return the same cell instance
-     */
-    public void enableCache() {
-        cache = new ConcurrentHashMap<>();
-    }
-
-    /**
-     * Disable cell data cache
-     */
-    public void disableCache() {
-        cache = null;
-    }
-
-    /**
-     * Get a MapDataSerializer for encrypted map with the given key
-     * Use the current serializer as inner serializer (and also use the current cache)
-     *
-     * @param key The encryption key
-     *
-     * @return The map serializer
-     */
-    public MapDataSerializer withKey(Key key) {
-        return new EncryptedMapDataSerializer(key, this);
-    }
-
-    /**
-     * Get a MapDataSerializer for encrypted map with the given key
-     * This is equivalent to `serializer.withKey(Key.parse(key));`
-     *
-     * <code>
-     *     CellData[] cells = serializer.withKey(gdm.key()).deserialize(mapData);
-     * </code>
-     *
-     * @param key The encryption key as string
-     *
-     * @return The map serializer
-     */
-    public MapDataSerializer withKey(String key) {
-        return withKey(Key.parse(key));
-    }
-
-    private CellData deserializeCell(String cellData) {
-        if (cache == null) {
-            return new ByteArrayCell(Base64.toBytes(cellData));
-        }
-
-        return cache.computeIfAbsent(cellData, data -> new ByteArrayCell(Base64.toBytes(data)));
-    }
-
-    private String serializeCell(CellData cell) {
-        final byte[] data = new byte[CELL_DATA_LENGTH];
-
-        data[0] = (byte) ((cell.active() ? (1) : (0)) << 5);
-        data[0] = (byte) (data[0] | (cell.lineOfSight() ? (1) : (0)));
-        data[0] = (byte) (data[0] | (cell.ground().number() & 1536) >> 6);
-        data[0] = (byte) (data[0] | (cell.layer1().number() & 8192) >> 11);
-        data[0] = (byte) (data[0] | (cell.layer2().number() & 8192) >> 12);
-        data[1] = (byte) ((cell.ground().rotation() & 3) << 4);
-        data[1] = (byte) (data[1] | cell.ground().level() & 15);
-        data[2] = (byte) ((cell.movement().ordinal() & 7) << 3);
-        data[2] = (byte) (data[2] | cell.ground().number() >> 6 & 7);
-        data[3] = (byte) (cell.ground().number() & 63);
-        data[4] = (byte) ((cell.ground().slope() & 15) << 2);
-        data[4] = (byte) (data[4] | (cell.ground().flip() ? (1) : (0)) << 1);
-        data[4] = (byte) (data[4] | cell.layer1().number() >> 12 & 1);
-        data[5] = (byte) (cell.layer1().number() >> 6 & 63);
-        data[6] = (byte) (cell.layer1().number() & 63);
-        data[7] = (byte) ((cell.layer1().rotation() & 3) << 4);
-        data[7] = (byte) (data[7] | (cell.layer1().flip() ? (1) : (0)) << 3);
-        data[7] = (byte) (data[7] | (cell.layer2().flip() ? (1) : (0)) << 2);
-        data[7] = (byte) (data[7] | (cell.layer2().interactive() ? (1) : (0)) << 1);
-        data[7] = (byte) (data[7] | cell.layer2().number() >> 12 & 1);
-        data[8] = (byte) (cell.layer2().number() >> 6 & 63);
-        data[9] = (byte) (cell.layer2().number() & 63);
-
-        return Base64.encode(data);
     }
 }

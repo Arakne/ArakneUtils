@@ -33,13 +33,13 @@ import java.util.stream.Stream;
  *
  * Note: This is an immutable value object
  */
-final public class Colors {
-    final static public Colors DEFAULT = new Colors(-1, -1, -1);
-    static private RandomUtil random;
+public final class Colors {
+    public static final Colors DEFAULT = new Colors(-1, -1, -1);
+    private static RandomUtil random;
 
-    final private int color1;
-    final private int color2;
-    final private int color3;
+    private final int color1;
+    private final int color2;
+    private final int color3;
 
     public Colors(int color1, int color2, int color3) {
         this.color1 = color1;
@@ -47,14 +47,23 @@ final public class Colors {
         this.color3 = color3;
     }
 
+    /**
+     * @return The first sprite color
+     */
     public int color1() {
         return color1;
     }
 
+    /**
+     * @return The second sprite color
+     */
     public int color2() {
         return color2;
     }
 
+    /**
+     * @return The third sprite color
+     */
     public int color3() {
         return color3;
     }
@@ -109,7 +118,7 @@ final public class Colors {
      *
      * @return A new random Colors
      */
-    static public Colors randomized() {
+    public static Colors randomized() {
         if (random == null) {
             random = RandomUtil.createShared();
         }
@@ -124,7 +133,7 @@ final public class Colors {
      *
      * @return A new random Colors
      */
-    static public Colors randomized(Random random) {
+    public static Colors randomized(Random random) {
         return new Colors(
             random.nextInt(16777216),
             random.nextInt(16777216),
@@ -142,7 +151,8 @@ final public class Colors {
             return false;
         }
 
-        Colors colors = (Colors) o;
+        final Colors colors = (Colors) o;
+
         return color1 == colors.color1 && color2 == colors.color2 && color3 == colors.color3;
     }
 

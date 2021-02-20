@@ -24,9 +24,9 @@ import java.util.Objects;
 /**
  * Dimensions for 2D object
  */
-final public class Dimensions {
-    final private int width;
-    final private int height;
+public final class Dimensions {
+    private final int width;
+    private final int height;
 
     public Dimensions(int width, int height) {
         this.width = width;
@@ -61,7 +61,7 @@ final public class Dimensions {
             return false;
         }
 
-        Dimensions other = (Dimensions) o;
+        final Dimensions other = (Dimensions) o;
 
         return other.height == height && other.width == width;
     }

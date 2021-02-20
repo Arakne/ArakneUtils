@@ -22,8 +22,8 @@ package fr.arakne.utils.encoding;
 /**
  * Utility class for Dofus Pseudo base 64
  */
-final public class Base64 {
-    final static private char[] CHARSET = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+public final class Base64 {
+    private static final char[] CHARSET = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
         't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
         'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '_'};
 
@@ -48,7 +48,7 @@ final public class Base64 {
      * @see Base64#ord(char) For perform the opposite operation
      * @see Base64#decode(String) For decode an int string
      */
-    static public int ord(char c) {
+    public static int ord(char c) {
         if (c >= 'a' && c <= 'z') {
             return c - 'a';
         }
@@ -86,7 +86,7 @@ final public class Base64 {
      * @see Base64#ord(char) For perform the opposite operation
      * @see Base64#encode(int, int) For encode a 32 bits integer to a string
      */
-    static public char chr(int value) {
+    public static char chr(int value) {
         return CHARSET[value];
     }
 
@@ -97,7 +97,7 @@ final public class Base64 {
      * @param value Value to encode.
      * @return Encoded value
      */
-    static public char chrMod(int value) {
+    public static char chrMod(int value) {
         return CHARSET[value % CHARSET.length];
     }
 
@@ -117,12 +117,12 @@ final public class Base64 {
      *
      * @throws IllegalArgumentException When the length parameter is invalid
      */
-    static public String encode(int value, int length) {
+    public static String encode(int value, int length) {
         if (length < 1 || length > 6) {
             throw new IllegalArgumentException("Invalid length parameter : it must be in range [1-6]");
         }
 
-        char[] encoded = new char[length];
+        final char[] encoded = new char[length];
 
         for (int i = length - 1; i >= 0; --i) {
             encoded[i] = CHARSET[value & 63];
@@ -146,7 +146,7 @@ final public class Base64 {
      *
      * @see Base64#toBytes(String) For the opposite operation
      */
-    static public String encode(byte[] data) {
+    public static String encode(byte[] data) {
         final char[] encoded = new char[data.length];
 
         for (int i = 0; i < data.length; ++i) {
@@ -170,7 +170,7 @@ final public class Base64 {
      *
      * @throws IllegalArgumentException When an invalid string is given
      */
-    static public int decode(String encoded) {
+    public static int decode(String encoded) {
         if (encoded.length() > 6) {
             throw new IllegalArgumentException("Invalid encoded string : too long");
         }
@@ -198,8 +198,8 @@ final public class Base64 {
      *
      * @return The decode byte array. The array size will be the same as the string length
      */
-    static public byte[] toBytes(String encoded) {
-        byte[] decoded = new byte[encoded.length()];
+    public static byte[] toBytes(String encoded) {
+        final byte[] decoded = new byte[encoded.length()];
 
         for (int i = 0; i < encoded.length(); ++i) {
             decoded[i] = (byte) Base64.ord(encoded.charAt(i));
