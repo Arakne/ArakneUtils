@@ -19,6 +19,7 @@
 
 package fr.arakne.utils.maps.path;
 
+import fr.arakne.utils.encoding.Base64;
 import fr.arakne.utils.maps._test.MyDofusCell;
 import fr.arakne.utils.maps._test.MyDofusMap;
 import fr.arakne.utils.maps.constant.Direction;
@@ -49,11 +50,14 @@ class DecoderTest {
         assertEquals(map.get(85), decoder.nextCellByDirection(map.get(100), Direction.NORTH_WEST).get());
         assertEquals(map.get(71), decoder.nextCellByDirection(map.get(100), Direction.NORTH).get());
         assertEquals(map.get(86), decoder.nextCellByDirection(map.get(100), Direction.NORTH_EAST).get());
+        assertEquals(map.get(0), decoder.nextCellByDirection(map.get(1), Direction.WEST).get());
     }
 
     @Test
     void nextCellByDirectionOutOfLimit() {
         assertFalse(decoder.nextCellByDirection(map.get(470), Direction.SOUTH).isPresent());
+        assertFalse(decoder.nextCellByDirection(map.get(478), Direction.EAST).isPresent());
+        assertFalse(decoder.nextCellByDirection(map.get(0), Direction.WEST).isPresent());
     }
 
     @Test
@@ -71,6 +75,7 @@ class DecoderTest {
         assertThrows(PathException.class, () -> decoder.decode("aZZ", map.get(100)), "Invalid cell number");
         assertThrows(PathException.class, () -> decoder.decode("ebH", map.get(0)), "Invalid cell number");
         assertThrows(PathException.class, () -> decoder.decode("a__"), "Invalid cell number");
+        assertThrows(PathException.class, () -> decoder.decode("ahF"), "Invalid cell number");
     }
 
     @Test

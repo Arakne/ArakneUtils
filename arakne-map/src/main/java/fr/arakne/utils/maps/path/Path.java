@@ -149,7 +149,7 @@ public final class Path<C extends MapCell> implements Collection<PathStep<C>> {
      * @return The new path instance
      */
     public Path<C> truncate(int newSize) {
-        if (newSize > size()) {
+        if (newSize >= size()) {
             return this;
         }
 

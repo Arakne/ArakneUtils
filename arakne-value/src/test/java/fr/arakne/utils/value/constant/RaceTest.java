@@ -27,6 +27,7 @@ class RaceTest {
     @Test
     void byId() {
         assertSame(Race.ECAFLIP, Race.byId(6));
+        assertSame(Race.PANDAWA, Race.byId(12));
         assertThrows(IndexOutOfBoundsException.class, () -> Race.byId(42));
     }
 }

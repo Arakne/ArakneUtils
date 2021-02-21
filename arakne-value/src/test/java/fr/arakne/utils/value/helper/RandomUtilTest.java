@@ -41,6 +41,7 @@ class RandomUtilTest {
     @Test
     void randFixed() {
         assertEquals(15, util.rand(15, 0));
+        assertEquals(15, util.rand(15, 15));
     }
 
     @Test
@@ -49,9 +50,35 @@ class RandomUtilTest {
     }
 
     @Test
+    void randStartWithZeroShouldBeEquitablyDistributed() {
+        int[] counts = new int[10];
+
+        for (int i = 0; i < 1000; ++i) {
+            ++counts[util.rand(0, 9)];
+        }
+
+        for (int count : counts) {
+            assertBetween(80, 120, count);
+        }
+    }
+
+    @Test
     void randInterval() {
         for (int i = 0; i < 100; ++i) {
             assertBetween(25, 45, util.rand(25, 45));
+        }
+    }
+
+    @Test
+    void randIntervalShouldBeEquitablyDistributed() {
+        int[] counts = new int[10];
+
+        for (int i = 0; i < 1000; ++i) {
+            ++counts[util.rand(10, 19) - 10];
+        }
+
+        for (int count : counts) {
+            assertBetween(80, 120, count);
         }
     }
 
@@ -63,6 +90,7 @@ class RandomUtilTest {
     @Test
     void randArrayFixed() {
         assertEquals(32, util.rand(new int[] {32, 0}));
+        assertEquals(32, util.rand(new int[] {32, 32}));
     }
 
     @Test
@@ -204,6 +232,19 @@ class RandomUtilTest {
 
             assertBetween(0d, 10d, value);
             assertNotEquals(value, (double) (int) value);
+        }
+    }
+
+    @Test
+    void decimalShouldBeEquitablyDistributed() {
+        int[] counts = new int[10];
+
+        for (int i = 0; i < 1000; ++i) {
+            ++counts[(int) util.decimal(10)];
+        }
+
+        for (int count : counts) {
+            assertBetween(80, 120, count);
         }
     }
 

@@ -90,6 +90,7 @@ class CoordinateCellTest {
         assertEquals(Direction.NORTH_EAST, cell.directionTo(new CoordinateCell<>(map.get(129))));
         assertEquals(Direction.SOUTH_EAST, cell.directionTo(new CoordinateCell<>(map.get(217))));
         assertEquals(Direction.NORTH_WEST, cell.directionTo(new CoordinateCell<>(map.get(67))));
+        assertEquals(Direction.NORTH_EAST, cell.directionTo(new CoordinateCell<>(map.get(157))));
     }
 
     @Test

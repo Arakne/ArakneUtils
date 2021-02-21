@@ -35,6 +35,8 @@ class XorCipherTest {
 
         assertEquals("251C4C070A593A16520701594C", cipher.encrypt("Hello World !", 0));
         assertEquals("251C4C070A59271648054558", cipher.encrypt("Hello John !", 0));
+        assertEquals("483A134E2440483A134E2449", cipher.encrypt("éà", 0));
+        assertEquals("230015011600210A11035901", cipher.encrypt("Hello John !", 3));
         assertEquals("271104091D003C0A0B03104844", new XorCipher("other key").encrypt("Hello World !", 0));
     }
 
@@ -47,6 +49,8 @@ class XorCipherTest {
 
         assertEquals("Hello World !", cipher.decrypt("251C4C070A593A16520701594C", 0));
         assertEquals("Hello John !", cipher.decrypt("251C4C070A59271648054558", 0));
+        assertEquals("éà", cipher.decrypt("483A134E2440483A134E2449", 0));
+        assertEquals("Hello John !", cipher.decrypt("230015011600210A11035901", 3));
 
         assertNotEquals("Hello World !", new XorCipher("other key").decrypt("251C4C070A593A16520701594C", 0));
     }

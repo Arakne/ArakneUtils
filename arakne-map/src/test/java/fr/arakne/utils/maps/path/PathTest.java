@@ -26,6 +26,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -103,5 +104,19 @@ class PathTest {
         assertEquals(path.get(1), newPath.get(1));
 
         assertSame(path, path.truncate(100));
+        assertSame(path, path.truncate(4));
+    }
+
+    @Test
+    void collectionInterface() {
+        assertTrue(path.contains(path.get(2)));
+        assertFalse(path.contains(new Object()));
+
+        assertArrayEquals(new PathStep[] {path.get(0), path.get(1), path.get(2), path.get(3)}, path.toArray());
+        assertArrayEquals(new PathStep[] {path.get(0), path.get(1), path.get(2), path.get(3)}, path.toArray(new PathStep[0]));
+
+        PathStep<MyDofusCell> step = new PathStep<>(map.get(42), Direction.NORTH);
+        assertFalse(path.containsAll(Collections.singleton(step)));
+        assertTrue(path.containsAll(Collections.singleton(path.get(1))));
     }
 }

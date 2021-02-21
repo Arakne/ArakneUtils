@@ -31,3 +31,4 @@ build:
                       analysis:
                         file: 'arakne-map/target/checkstyle-result.xml'
                         format: 'general-checkstyle'
+                    - command: mvn pitest:mutationCoverage

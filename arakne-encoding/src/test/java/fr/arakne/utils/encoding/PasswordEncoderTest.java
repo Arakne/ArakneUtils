@@ -84,6 +84,9 @@ class PasswordEncoderTest {
         assertEquals("", encoder.decode(encoder.encode("")));
         assertEquals("aaa", encoder.decode(encoder.encode("aaa")));
         assertEquals("Duis blandit id", encoder.decode(encoder.encode("Duis blandit id")));
+
+        encoder = new PasswordEncoder("a");
+        assertEquals("a", encoder.decode(encoder.encode("a")));
     }
 
     @Test
