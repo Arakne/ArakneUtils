@@ -140,26 +140,32 @@ public final class LineOfSight<C extends BattlefieldCell> {
         // For every X between source and target
         for (int currentX = source.x(); currentX <= target.x(); ++currentX) {
             // yMax is the value of Y at the current X
-            final int yMax = (int) Math.round((currentX + 0.5) * ySlope + yAtZero);
+            final double yAtCurrentX = (currentX + 0.5) * ySlope + yAtZero;
 
-            for (;;) {
+            final int yMax;
+            final int nextY;
+
+            if (yDirection > 0) {
+                nextY = (int) Math.round(yAtCurrentX);
+                yMax = (int) Math.ceil(yAtCurrentX - 0.5);
+            } else {
+                nextY = (int) Math.ceil(yAtCurrentX - 0.5);
+                yMax = (int) Math.round(yAtCurrentX);
+            }
+
+            for (int y = currentY; y * yDirection <= yMax * yDirection; y += yDirection) {
                 // target is reached : do not check it's LoS
-                if (target.is(currentX, currentY)) {
+                if (target.is(currentX, y)) {
                     return true;
                 }
 
                 // Ignore the source LoS
-                if (!source.is(currentX, currentY) && cellSightBlocking(currentX, currentY)) {
+                if (!source.is(currentX, y) && cellSightBlocking(currentX, y)) {
                     return false;
                 }
-
-                // Increment Y until yMax is reached
-                if (currentY == yMax) {
-                    break;
-                }
-
-                currentY += yDirection;
             }
+
+            currentY = nextY;
         }
 
         // target X == current X : increments Y until target is reached
