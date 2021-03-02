@@ -43,4 +43,21 @@ public interface MapCell {
      * @return The parent DofusMap
      */
     public DofusMap<?> map();
+
+    /**
+     * Get the coordinate of the current cell
+     * This is equivalent to {@code new CoordinateCell<>(cell)}
+     *
+     * Note: this method will always recreate a new {@link CoordinateCell} instance
+     *
+     * <pre>{@code
+     * // Compute distance between two cells
+     * int distance = current.coordinate().distance(target.coordinate());
+     * }</pre>
+     *
+     * @return The cell coordinate
+     */
+    public default CoordinateCell<? extends MapCell> coordinate() {
+        return new CoordinateCell<>(this);
+    }
 }
