@@ -57,7 +57,7 @@ public interface MapCell {
      *
      * @return The cell coordinate
      */
-    public default CoordinateCell<? extends MapCell> coordinate() {
+    public default CoordinateCell<MapCell> coordinate() {
         return new CoordinateCell<>(this);
     }
 }

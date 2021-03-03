@@ -48,7 +48,7 @@ public interface BattlefieldCell extends MapCell {
      *
      * @return The current cell sight
      */
-    public default CellSight<? extends BattlefieldCell> sight() {
+    public default CellSight<BattlefieldCell> sight() {
         return new CellSight<>(new CoordinateCell<>(this));
     }
 }
