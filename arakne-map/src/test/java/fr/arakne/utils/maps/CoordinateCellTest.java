@@ -39,6 +39,11 @@ class CoordinateCellTest {
     }
 
     @Test
+    void mapCellHelper() {
+        assertEquals(new CoordinateCell<>(map.get(145)), map.get(145).coordinate());
+    }
+
+    @Test
     void firstCell() {
         CoordinateCell<MyDofusCell> cell = new CoordinateCell<>(map.get(0));
 

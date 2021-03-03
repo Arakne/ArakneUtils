@@ -14,10 +14,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ArakneUtils.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright (c) 2017-2020 Vincent Quatrevieux
+ * Copyright (c) 2017-2021 Vincent Quatrevieux
  */
 
 package fr.arakne.utils.maps;
+
+import fr.arakne.utils.maps.sight.CellSight;
 
 /**
  * Base type for a battlefield cell
@@ -25,6 +27,28 @@ package fr.arakne.utils.maps;
 public interface BattlefieldCell extends MapCell {
     /**
      * Check if the cell block line of sight
+     *
+     * @see CellSight
+     * @see BattlefieldCell#sight()
      */
     public boolean sightBlocking();
+
+    /**
+     * Get the current cell sight
+     * This method is equivalent to {@code new CellSight<>(cell)}
+     *
+     * Note: each call of this method will recreate a new {@link CellSight} instance
+     *
+     * <pre>{@code
+     * // Check if the "target" cell is accessible from the current cell
+     * if (!fighter.cell().sight().isFree(target)) {
+     *     return false;
+     * }
+     * }</pre>
+     *
+     * @return The current cell sight
+     */
+    public default CellSight<BattlefieldCell> sight() {
+        return new CellSight<>(new CoordinateCell<>(this));
+    }
 }
