@@ -195,24 +195,46 @@ cell15.directionTo(target); // Compute the direction between cells 15 and 42
 cell15.distance(target); // Compute the distance between the two cells
 ```
 
-### [LineOfSight](src/main/java/fr/arakne/utils/maps/LineOfSight.java)
+### Line of sight
 
 Helper for check if a cell is accessible following the line of sight.
 
 Note: To works, the cells must implement [BattlefieldCell](src/main/java/fr/arakne/utils/maps/BattlefieldCell.java).
 
 ```java
+MyMap map = getMap();
+
 // Decorate the map
-MapMap map = getMap();
-LineOfSight los = new LineOfSight(map);
+BattlefieldSight<MyMap> mapSight = new BattlefieldSight<>(map);
 
 // Check the line of sight between two cells
-if (los.between(fighter.cell(), map.get(targetCell))) {
+if (mapSight.between(fighter.cell(), map.get(targetCell))) {
     // The target cell is accessible from the fighter cell
 } else {
     // Error : cell is not accessible
 }
+
+// Same as above
+if (mapSight.from(fighter.cell()).isFree(map.get(targetCell))) {
+    // The target cell is accessible from the fighter cell
+} else {
+    // Error : cell is not accessible
+}
+
+// You can also use helper method on cell objects :
+if (fighter.cell().sight().isFree(map.get(targetCell))) {
+    // ...
+}
+
+// Get all accessible cells from the current cell :
+for (MyCell cell : mapSight.from(fighter.cell()).available()) {
+    // All cells are accessible
+}
 ```
+
+See:
+- [BattlefieldSight.java](src/main/java/fr/arakne/utils/maps/sight/BattlefieldSight.java)
+- [CellSight.java](src/main/java/fr/arakne/utils/maps/sight/CellSight.java)
 
 ### Constants
 
