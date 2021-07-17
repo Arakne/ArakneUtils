@@ -25,11 +25,15 @@ import fr.arakne.utils.maps.constant.Direction;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -236,6 +240,18 @@ public final class Pathfinder<C extends MapCell> {
         private final PriorityQueue<Step> movements = new PriorityQueue<>();
 
         /**
+         * Get all discovered steps for reach the cell used as key.
+         * Those steps are sorted by their score as {@link Automaton#movements}.
+         *
+         * This map is used to ensure that a better step is not present on available movements
+         * when pushing all possible movements.
+         *
+         * This map is always synchronized with {@link Automaton#movements} :
+         * any writes must be applied on both structures.
+         */
+        private final Map<C, SortedSet<Step>> stepsByCurrentCell = new HashMap<>();
+
+        /**
          * Set of already explored steps
          * This set ensure that the pathfinder will not returns to an already explored cell
          * which can cause infinity loops
@@ -263,7 +279,8 @@ public final class Pathfinder<C extends MapCell> {
                 nextCellByDirection(direction)
                     .filter(cell -> !explored.contains(cell))
                     .filter(walkablePredicated)
-                    .ifPresent(cell -> movements.add(current.next(cell, direction)))
+                    .map(cell -> current.next(cell, direction))
+                    .ifPresent(this::push)
                 ;
             }
         }
@@ -284,7 +301,11 @@ public final class Pathfinder<C extends MapCell> {
             }
 
             current = movements.poll();
-            explored.add(current.cell.cell());
+
+            final C cell = current.cell.cell();
+
+            stepsByCurrentCell.get(cell).remove(current);
+            explored.add(cell);
         }
 
         /**
@@ -330,6 +351,25 @@ public final class Pathfinder<C extends MapCell> {
          */
         private Optional<C> nextCellByDirection(Direction direction) {
             return decoder.nextCellByDirection(current.cell.cell(), direction);
+        }
+
+        /**
+         * Try to push a new step on possible movements
+         * If a better step (i.e. with lower score) exists, the new step will be ignored
+         *
+         * @param step The new possible step to add
+         */
+        private void push(Step step) {
+            final C cell = step.cell.cell();
+            final SortedSet<Step> availableSteps = stepsByCurrentCell.computeIfAbsent(cell, c -> new TreeSet<>());
+
+            // A step with a lower cost is found (do not compare distance because both steps have the same distance)
+            if (!availableSteps.isEmpty() && availableSteps.first().cost <= step.cost) {
+                return;
+            }
+
+            availableSteps.add(step);
+            movements.add(step);
         }
 
         /**

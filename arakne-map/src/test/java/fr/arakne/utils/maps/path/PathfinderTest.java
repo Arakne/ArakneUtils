@@ -22,8 +22,11 @@ package fr.arakne.utils.maps.path;
 import fr.arakne.utils.maps._test.MyDofusCell;
 import fr.arakne.utils.maps._test.MyDofusMap;
 import fr.arakne.utils.maps.constant.Direction;
+import fr.arakne.utils.value.helper.RandomUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -102,21 +105,21 @@ class PathfinderTest {
         Path<MyDofusCell> path = pathfinder.targetDistance(1).findPath(map.get(107), map.get(225));
 
         assertArrayEquals(
-            new int[] {107, 122, 137, 152, 167, 181, 195, 210},
+            new int[] {107, 122, 137, 151, 166, 181, 196, 211},
             path.stream().mapToInt(step -> step.cell().id()).toArray()
         );
 
         path = pathfinder.targetDistance(2).findPath(map.get(107), map.get(225));
 
         assertArrayEquals(
-            new int[] {107, 122, 137, 152, 167, 181, 195},
+            new int[] {107, 122, 137, 151, 166, 181, 196},
             path.stream().mapToInt(step -> step.cell().id()).toArray()
         );
 
         path = pathfinder.targetDistance(3).findPath(map.get(107), map.get(225));
 
         assertArrayEquals(
-            new int[] {107, 122, 137, 152, 167, 182},
+            new int[] {107, 122, 137, 151, 166, 181},
             path.stream().mapToInt(step -> step.cell().id()).toArray()
         );
     }
@@ -131,7 +134,7 @@ class PathfinderTest {
         Path<MyDofusCell> path = pathfinder
             .cellWeightFunction(cell -> cell.id() % 2 == 0 ? 10 : 1)
             .findPath(map.get(328), map.get(384))
-            ;
+        ;
 
         assertArrayEquals(
             new int[] {328, 313, 327, 341, 356, 370, 384},
@@ -168,7 +171,7 @@ class PathfinderTest {
         Path<MyDofusCell> path = pathfinder.addFirstCell(false).findPath(map.get(336), map.get(384));
 
         assertArrayEquals(
-            new int[] {321, 307, 292, 277, 263, 249, 235, 221, 207, 193, 179, 165, 180, 195, 181, 196, 211, 226, 241, 256, 270, 284, 298, 313, 328, 342, 356, 370, 384},
+            new int[] {322, 307, 292, 277, 263, 249, 235, 221, 207, 193, 179, 165, 180, 195, 210, 196, 211, 226, 241, 256, 270, 284, 298, 313, 328, 342, 356, 370, 384},
             path.stream().mapToInt(step -> step.cell().id()).toArray()
         );
     }
@@ -178,18 +181,28 @@ class PathfinderTest {
         Path<MyDofusCell> path = pathfinder.findPath(map.get(336), map.get(384));
 
         assertArrayEquals(
-            new int[] {336, 321, 307, 292, 277, 263, 249, 235, 221, 207, 193, 179, 165, 180, 195, 181, 196, 211, 226, 241, 256, 270, 284, 298, 313, 328, 342, 356, 370, 384},
+            new int[] {336, 322, 307, 292, 277, 263, 249, 235, 221, 207, 193, 179, 165, 180, 195, 210, 196, 211, 226, 241, 256, 270, 284, 298, 313, 328, 342, 356, 370, 384},
             path.stream().mapToInt(step -> step.cell().id()).toArray()
         );
     }
 
     @Test
     void encodePath() {
-        assertEquals("afqffbheZfevhcLbddhc1beadeQbfidga", pathfinder.findPath(map.get(336), map.get(384)).encode());
+        assertEquals("afqhfcfevhcLbdshdebeadeQbfidga", pathfinder.findPath(map.get(336), map.get(384)).encode());
     }
 
     @Test
     void exploredCellLimit() {
         assertThrows(PathException.class, () -> pathfinder.exploredCellLimit(10).findPath(map.get(336), map.get(384)).encode());
+    }
+
+    @Test
+    void infiniteLoop() {
+        map = MyDofusMap.parse("Hhaae6HaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaa7dHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaae6HaaaHhaaeaaa6IHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhGae6HaaaHhGaeaaaaaHhqaeqgaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhMSeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaa6SHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeJgaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeJgaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhMSeaaaaaHhGaeaaa6IHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaa6IHhGaeaaaaaHhGaeJgaaaHhGaeaaaaaHhGae6HaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGae6HaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaae6HaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaad1xHhGaeJgaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaad1xHhGaeaad1xHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaa6IHhGaeaaaaaHhGaeaad1xHhGaeaad1xHhGae6Hl1xHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaad1xHhGaeaad1xHhGaeaaa6IHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaad1xHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhqaeaaaqgHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaad1xHhGaeaad1xHhGaeaaaaaHhGaeaaaaaHhMSeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaa6IHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaaaaHhMSeaaaaaHhGae6HaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGae6HaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaad1xHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaad1xHhGaeJgd1xHhGaeaaaaaHhGaeaaaaaHhGae6HaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaad1xHhGaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaad1xHhGaeaaaaaHhaaeaaaaaHhaaeaaa7dHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaa6FHhaaeaaaaaHhaaeaaaaaHhGaeJgaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeJgaaaHhGae6HaaaHhaaeaaa6IHhaaeaaaaaHhaae6HaaaHhaaeaaa6XHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaa7eHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeJgaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaa6GHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaa6WHhaaeaaaaaHhGaeaaaaaHhGae6Hl1BHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGae6HaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaad1BHhGaeaaa6IHhGaeaaaaaHhMSeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaa7MHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGae6HaaaHhGaeaaaaaHhaaeaaaaaHhGaeaad1BHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaa6IHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeJgaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhqaeaaaqgHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhGaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaaHhaaeaaaaa");
+        pathfinder = new Decoder<>(map).pathfinder();
+
+        pathfinder.walkablePredicate(c -> c.walkable() && c.id() != 33);
+
+        assertThrows(PathException.class, () -> pathfinder.findPath(map.get(44), map.get(18)));
     }
 }
