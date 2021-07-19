@@ -240,8 +240,8 @@ public final class Pathfinder<C extends MapCell> {
         private final PriorityQueue<Step> movements = new PriorityQueue<>();
 
         /**
-         * Get all discovered steps for reach the cell used as key.
-         * Those steps are sorted by their score as {@link Automaton#movements}.
+         * Store the best (i.e. lowest) Step for a given Cell.
+         * The score is computed in the same way as {@link Automaton#movements}.
          *
          * This map is used to ensure that a better step is not present on available movements
          * when pushing all possible movements.
@@ -249,7 +249,7 @@ public final class Pathfinder<C extends MapCell> {
          * This map is always synchronized with {@link Automaton#movements} :
          * any writes must be applied on both structures.
          */
-        private final Map<C, SortedSet<Step>> stepsByCurrentCell = new HashMap<>();
+        private final Map<C, Step> bestStepByCell = new HashMap<>();
 
         /**
          * Set of already explored steps
@@ -304,7 +304,7 @@ public final class Pathfinder<C extends MapCell> {
 
             final C cell = current.cell.cell();
 
-            stepsByCurrentCell.get(cell).remove(current);
+            bestStepByCell.remove(cell);
             explored.add(cell);
         }
 
@@ -361,14 +361,14 @@ public final class Pathfinder<C extends MapCell> {
          */
         private void push(Step step) {
             final C cell = step.cell.cell();
-            final SortedSet<Step> availableSteps = stepsByCurrentCell.computeIfAbsent(cell, c -> new TreeSet<>());
+            final Step bestStep = bestStepByCell.get(cell);
 
             // A step with a lower cost is found (do not compare distance because both steps have the same distance)
-            if (!availableSteps.isEmpty() && availableSteps.first().cost <= step.cost) {
+            if (bestStep != null && bestStep.cost <= step.cost) {
                 return;
             }
 
-            availableSteps.add(step);
+            bestStepByCell.put(cell, step);
             movements.add(step);
         }
 
