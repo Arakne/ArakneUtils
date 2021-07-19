@@ -1,9 +1,9 @@
 build:
     nodes:
-      analysis:
-        dependencies:
-          override:
-            - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dcheckstyle.skip -B -V
+        analysis:
+          dependencies:
+            override:
+              - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dcheckstyle.skip -B -V
 
         tests:
             environment:
@@ -11,8 +11,8 @@ build:
                 timezone: FR
 
             dependencies:
-              override:
-                - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dcheckstyle.skip -B -V
+                override:
+                  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dcheckstyle.skip -B -V
 
             tests:
                 override:
