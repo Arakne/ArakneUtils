@@ -28,14 +28,19 @@ import java.util.Objects;
  *
  * https://github.com/Emudofus/Dofus/blob/1.29/ank/battlefield/utils/Pathfinding.as#L191
  */
-public final class CoordinateCell<C extends MapCell> {
+public final class CoordinateCell<C extends MapCell<C>> {
     private final C cell;
 
     private final int x;
     private final int y;
 
     /**
+     * CoordinateCell constructor.
+     * Prefer use {@link MapCell#coordinate()} method instead of directly call the constructor
+     *
      * @param cell The cell to wrap
+     *
+     * @see MapCell#coordinate() For get the {@link CoordinateCell} instance from a cell
      */
     public CoordinateCell(C cell) {
         this.cell = cell;
@@ -116,6 +121,18 @@ public final class CoordinateCell<C extends MapCell> {
     }
 
     /**
+     * Compute the direction to the target cell
+     *
+     * https://github.com/Emudofus/Dofus/blob/1.29/ank/battlefield/utils/Pathfinding.as#L204
+     *
+     * @param target The target cell
+     * @return The direction
+     */
+    public Direction directionTo(C target) {
+        return directionTo(target.coordinate());
+    }
+
+    /**
      * Get the cell distance
      * Note: Do not compute a pythagorean distance, but "square" distance.
      *       So, this distance represents the minimal number of cells for a path between current and target.
@@ -125,6 +142,18 @@ public final class CoordinateCell<C extends MapCell> {
      */
     public int distance(CoordinateCell<C> target) {
         return Math.abs(x - target.x) + Math.abs(y - target.y);
+    }
+
+    /**
+     * Get the cell distance
+     * Note: Do not compute a pythagorean distance, but "square" distance.
+     *       So, this distance represents the minimal number of cells for a path between current and target.
+     *
+     * @param target The target cell
+     * @return The distance, in cells number
+     */
+    public int distance(C target) {
+        return distance(target.coordinate());
     }
 
     @Override

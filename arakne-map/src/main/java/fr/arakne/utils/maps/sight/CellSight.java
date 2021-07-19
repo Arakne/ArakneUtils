@@ -34,7 +34,7 @@ import java.util.function.BiConsumer;
  *
  * @param <C> The cell type
  */
-public final class CellSight<C extends BattlefieldCell> {
+public final class CellSight<C extends BattlefieldCell<C>> {
     private final BattlefieldSight<C> battlefield;
     private final CoordinateCell<C> source;
 
@@ -43,9 +43,8 @@ public final class CellSight<C extends BattlefieldCell> {
         this.source = source;
     }
 
-    @SuppressWarnings("unchecked")
     public CellSight(CoordinateCell<C> source) {
-        this(new BattlefieldSight<>((DofusMap<C>) source.cell().map()), source);
+        this(new BattlefieldSight<>(source.cell().map()), source);
     }
 
     /**
@@ -98,7 +97,7 @@ public final class CellSight<C extends BattlefieldCell> {
      * @return true if line sight of sight is free
      */
     public boolean isFree(C target) {
-        return isFree(new CoordinateCell<>(target));
+        return isFree(target.coordinate());
     }
 
     /**
@@ -118,7 +117,7 @@ public final class CellSight<C extends BattlefieldCell> {
      * @return The cells iterator
      */
     public Iterator<C> to(C target) {
-        return to(new CoordinateCell<>(target));
+        return to(target.coordinate());
     }
 
     /**
@@ -167,9 +166,8 @@ public final class CellSight<C extends BattlefieldCell> {
      * @see CellSight#accessible() For dump accessible cells
      * @see CellSight#blocked() For dump blocked cells
      */
-    @SuppressWarnings("unchecked")
     public void forEach(BiConsumer<C, Boolean> cellViewConsumer) {
-        final DofusMap<C> map = (DofusMap<C>) source.cell().map();
+        final DofusMap<C> map = source.cell().map();
         final int size = map.size();
 
         for (int id = 0; id < size; ++id) {

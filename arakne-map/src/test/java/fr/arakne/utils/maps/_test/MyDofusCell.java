@@ -23,7 +23,7 @@ import fr.arakne.utils.maps.AbstractCellDataAdapter;
 import fr.arakne.utils.maps.BattlefieldCell;
 import fr.arakne.utils.maps.serializer.CellData;
 
-public class MyDofusCell extends AbstractCellDataAdapter<MyDofusMap> implements BattlefieldCell {
+public class MyDofusCell extends AbstractCellDataAdapter<MyDofusMap, MyDofusCell> implements BattlefieldCell<MyDofusCell> {
     public MyDofusCell(MyDofusMap map, CellData data, int id) {
         super(map, data, id);
     }

@@ -24,7 +24,7 @@
     <parent>
         <artifactId>arakne-utils</artifactId>
         <groupId>fr.arakne</groupId>
-        <version>0.5-alpha</version>
+        <version>0.6-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

@@ -47,7 +47,7 @@ import java.util.function.Predicate;
  *     ;
  * </code>
  */
-public final class Pathfinder<C extends MapCell> {
+public final class Pathfinder<C extends MapCell<C>> {
     private final Decoder<C> decoder;
 
     /**
@@ -259,8 +259,8 @@ public final class Pathfinder<C extends MapCell> {
         private final Set<C> explored = new HashSet<>();
 
         public Automaton(C source, C target) {
-            this.source = new CoordinateCell<>(source);
-            this.target = new CoordinateCell<>(target);
+            this.source = source.coordinate();
+            this.target = target.coordinate();
 
             this.current = new Step(this.source);
             explored.add(source);
@@ -444,7 +444,7 @@ public final class Pathfinder<C extends MapCell> {
              * @param direction The direction use to reach the cell
              */
             public Step next(C cell, Direction direction) {
-                return new Step(new CoordinateCell<>(cell), direction, this, cellWeightFunction.apply(cell));
+                return new Step(cell.coordinate(), direction, this, cellWeightFunction.apply(cell));
             }
 
             /**

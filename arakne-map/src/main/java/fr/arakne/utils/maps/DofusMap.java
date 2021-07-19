@@ -26,7 +26,7 @@ import fr.arakne.utils.value.Dimensions;
  *
  * @param <C> The cell type
  */
-public interface DofusMap<C extends MapCell> {
+public interface DofusMap<C extends MapCell<C>> {
     /**
      * Get the map size (the number of cells)
      *

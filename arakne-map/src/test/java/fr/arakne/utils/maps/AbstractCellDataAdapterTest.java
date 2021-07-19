@@ -51,7 +51,7 @@ class AbstractCellDataAdapterTest {
         }
     }
 
-    class MyDofusCell extends AbstractCellDataAdapter<MyDofusMap> {
+    class MyDofusCell extends AbstractCellDataAdapter<MyDofusMap, MyDofusCell> {
         public MyDofusCell(MyDofusMap map, CellData data, int id) {
             super(map, data, id);
         }

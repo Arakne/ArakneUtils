@@ -27,7 +27,7 @@ import java.util.Iterator;
 /**
  * Line of sight iterator for cells with same X coordinate
  */
-final class SameXLineOfSightIterator<C extends BattlefieldCell> implements Iterator<C> {
+final class SameXLineOfSightIterator<C extends BattlefieldCell<C>> implements Iterator<C> {
     private final BattlefieldSight<C> battlefield;
     private final CoordinateCell<C> source;
     private final CoordinateCell<C> target;

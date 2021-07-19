@@ -29,7 +29,7 @@ import java.util.Iterator;
  *
  * @param <C> The cell type
  */
-final class NotAlignedLineOfSightIterator<C extends BattlefieldCell> implements Iterator<C> {
+final class NotAlignedLineOfSightIterator<C extends BattlefieldCell<C>> implements Iterator<C> {
     private final BattlefieldSight<C> battlefield;
     private final CoordinateCell<C> source;
     private final CoordinateCell<C> target;

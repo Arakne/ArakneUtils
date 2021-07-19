@@ -27,8 +27,9 @@ import java.util.Objects;
  * Base implementation of MapCell by adapting a {@link CellData}
  *
  * @param <M> The DofusMap class
+ * @param <C> Should be the cell class it-self
  */
-public abstract class AbstractCellDataAdapter<M extends DofusMap<?>> implements MapCell {
+public abstract class AbstractCellDataAdapter<M extends DofusMap<C>, C extends MapCell<C>> implements MapCell<C> {
     protected final CellData data;
     private final M map;
     private final int id;
@@ -69,7 +70,7 @@ public abstract class AbstractCellDataAdapter<M extends DofusMap<?>> implements 
             return false;
         }
 
-        final AbstractCellDataAdapter<?> that = (AbstractCellDataAdapter<?>) o;
+        final AbstractCellDataAdapter<?, ?> that = (AbstractCellDataAdapter<?, ?>) o;
 
         return id == that.id && map == that.map;
     }

@@ -41,6 +41,7 @@ class CoordinateCellTest {
     @Test
     void mapCellHelper() {
         assertEquals(new CoordinateCell<>(map.get(145)), map.get(145).coordinate());
+        assertEquals(5, map.get(157).coordinate().distance(map.get(227).coordinate()));
     }
 
     @Test
@@ -92,10 +93,15 @@ class CoordinateCellTest {
         CoordinateCell<MyDofusCell> cell = new CoordinateCell<>(map.get(157));
 
         assertEquals(Direction.SOUTH_WEST, cell.directionTo(new CoordinateCell<>(map.get(227))));
+        assertEquals(Direction.SOUTH_WEST, cell.directionTo(map.get(227)));
         assertEquals(Direction.NORTH_EAST, cell.directionTo(new CoordinateCell<>(map.get(129))));
+        assertEquals(Direction.NORTH_EAST, cell.directionTo(map.get(129)));
         assertEquals(Direction.SOUTH_EAST, cell.directionTo(new CoordinateCell<>(map.get(217))));
+        assertEquals(Direction.SOUTH_EAST, cell.directionTo(map.get(217)));
         assertEquals(Direction.NORTH_WEST, cell.directionTo(new CoordinateCell<>(map.get(67))));
+        assertEquals(Direction.NORTH_WEST, cell.directionTo(map.get(67)));
         assertEquals(Direction.NORTH_EAST, cell.directionTo(new CoordinateCell<>(map.get(157))));
+        assertEquals(Direction.NORTH_EAST, cell.directionTo(map.get(157)));
     }
 
     @Test
@@ -104,7 +110,9 @@ class CoordinateCellTest {
 
         assertEquals(0, cell.distance(cell));
         assertEquals(5, cell.distance(new CoordinateCell<>(map.get(227))));
+        assertEquals(5, cell.distance(map.get(227)));
         assertEquals(24, cell.distance(new CoordinateCell<>(map.get(0))));
+        assertEquals(24, cell.distance(map.get(0)));
     }
 
     @Test

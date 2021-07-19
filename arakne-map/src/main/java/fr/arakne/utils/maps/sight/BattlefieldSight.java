@@ -39,7 +39,7 @@ import fr.arakne.utils.maps.DofusMap;
  *
  * @param <C> The battlefield cell type
  */
-public final class BattlefieldSight<C extends BattlefieldCell> {
+public final class BattlefieldSight<C extends BattlefieldCell<C>> {
     private final DofusMap<C> battlefield;
     private final int width; // store map width for optimisation
 
@@ -70,7 +70,7 @@ public final class BattlefieldSight<C extends BattlefieldCell> {
      * @see CellSight#isFree(BattlefieldCell)
      */
     public boolean between(C source, C target) {
-        return between(new CoordinateCell<>(source), new CoordinateCell<>(target));
+        return between(source.coordinate(), target.coordinate());
     }
 
     /**
@@ -138,7 +138,7 @@ public final class BattlefieldSight<C extends BattlefieldCell> {
      * @return The line of sight instance
      */
     public CellSight<C> from(C cell) {
-        return new CellSight<>(this, new CoordinateCell<>(cell));
+        return new CellSight<>(this, cell.coordinate());
     }
 
     /**

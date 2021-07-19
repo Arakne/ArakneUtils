@@ -24,7 +24,7 @@ import fr.arakne.utils.maps.sight.CellSight;
 /**
  * Base type for a battlefield cell
  */
-public interface BattlefieldCell extends MapCell {
+public interface BattlefieldCell<C extends BattlefieldCell<C>> extends MapCell<C> {
     /**
      * Check if the cell block line of sight
      *
@@ -48,7 +48,7 @@ public interface BattlefieldCell extends MapCell {
      *
      * @return The current cell sight
      */
-    public default CellSight<BattlefieldCell> sight() {
-        return new CellSight<>(new CoordinateCell<>(this));
+    public default CellSight<C> sight() {
+        return new CellSight<>(coordinate());
     }
 }

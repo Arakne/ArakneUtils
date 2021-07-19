@@ -61,7 +61,7 @@ Implements the MapCell :
 ```java
 // Simply extends AbstractCellDataAdapter. 
 // For custom implementation, implements MapCell instead.
-public class MyCell extends AbstractCellDataAdapter<MyMap> {
+public class MyCell extends AbstractCellDataAdapter<MyMap, MyCell> {
     public MyCell(MyMap map, CellData data, int id) {
         super(map, data, id);
     }
@@ -185,6 +185,8 @@ MyMap map = getMap();
 
 // Decorate the cell 15 with CoordinateCell
 CoordinateCell<MyCell> cell15 = new CoordinateCell<>(map.get(15));
+// Or use the helper method on the cell (preferred way : this method allows to cache the CoordinateCell instance)
+CoordinateCell<MyCell> cell15 = map.get(15).coordinate();
 
 // Get coordinates
 cell15.x();

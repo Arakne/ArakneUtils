@@ -25,7 +25,7 @@ import fr.arakne.utils.maps.constant.Direction;
 /**
  * Step for a path
  */
-public final class PathStep<C extends MapCell> {
+public final class PathStep<C extends MapCell<C>> {
     private final C cell;
     private final Direction direction;
 

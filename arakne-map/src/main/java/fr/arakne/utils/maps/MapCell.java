@@ -21,8 +21,17 @@ package fr.arakne.utils.maps;
 
 /**
  * Base type for a dofus map cell
+ * Usage :
+ * <pre>{@code
+ * // Note: the template parameter should be the used domain interface or class
+ * interface MyMapCell extends MapCell<MapCell> {
+ *     public void myCustomOperation();
+ * }
+ * }</pre>
+ *
+ * @param <C> Should be the cell class it-self
  */
-public interface MapCell {
+public interface MapCell<C extends MapCell<C>> {
     /**
      * Get the cell id
      *
@@ -42,7 +51,7 @@ public interface MapCell {
      *
      * @return The parent DofusMap
      */
-    public DofusMap<?> map();
+    public DofusMap<C> map();
 
     /**
      * Get the coordinate of the current cell
@@ -55,9 +64,27 @@ public interface MapCell {
      * int distance = current.coordinate().distance(target.coordinate());
      * }</pre>
      *
+     * You can optimise {@link CoordinateCell} creation by storing them into the cell instance,
+     * optionally wrapped into a {@link java.lang.ref.WeakReference} :
+     * <pre>{@code class MyCell extends MapCell<MyCell> {
+     *     // ...
+     *
+     *     private CoordinateCell<MyCell> coordinate;
+     *
+     *     @Override
+     *     public CoordinateCell<MyCell> coordinate() {
+     *         if (coordinate == null) {
+     *             coordinate = new CoordinateCell<>(this);
+     *         }
+     *
+     *         return coordinate;
+     *     }
+     * }}</pre>
+     *
      * @return The cell coordinate
      */
-    public default CoordinateCell<MapCell> coordinate() {
-        return new CoordinateCell<>(this);
+    @SuppressWarnings("unchecked")
+    public default CoordinateCell<C> coordinate() {
+        return new CoordinateCell<>((C) this);
     }
 }
