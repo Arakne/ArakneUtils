@@ -28,6 +28,8 @@ public interface BattlefieldCell<C extends BattlefieldCell<C>> extends MapCell<C
     /**
      * Check if the cell block line of sight
      *
+     * @return true if the cell block the line of sight (i.e. spell cannot be casted through this cell)
+     *
      * @see CellSight
      * @see BattlefieldCell#sight()
      */

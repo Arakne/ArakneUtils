@@ -66,12 +66,13 @@ public interface MapCell<C extends MapCell<C>> {
      *
      * You can optimise {@link CoordinateCell} creation by storing them into the cell instance,
      * optionally wrapped into a {@link java.lang.ref.WeakReference} :
-     * <pre>{@code class MyCell extends MapCell<MyCell> {
+     *
+     * <pre>{@code
+     * class MyCell extends MapCell<MyCell> {
      *     // ...
      *
      *     private CoordinateCell<MyCell> coordinate;
      *
-     *     @Override
      *     public CoordinateCell<MyCell> coordinate() {
      *         if (coordinate == null) {
      *             coordinate = new CoordinateCell<>(this);
@@ -79,7 +80,8 @@ public interface MapCell<C extends MapCell<C>> {
      *
      *         return coordinate;
      *     }
-     * }}</pre>
+     * }
+     * }</pre>
      *
      * @return The cell coordinate
      */
