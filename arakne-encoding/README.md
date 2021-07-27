@@ -10,7 +10,7 @@ For installing using maven, add this dependency into the `pom.xml` :
 <dependency>
     <groupId>fr.arakne</groupId>
     <artifactId>arakne-encoding</artifactId>
-    <version>0.5-alpha</version>
+    <version>0.6-alpha</version>
 </dependency>
 ```
 
