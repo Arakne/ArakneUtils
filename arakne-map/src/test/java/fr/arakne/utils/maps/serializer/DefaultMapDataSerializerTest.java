@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings({"initialization.field.uninitialized", "array.access.unsafe.high.constant"})
 class DefaultMapDataSerializerTest {
     private DefaultMapDataSerializer serializer;
 

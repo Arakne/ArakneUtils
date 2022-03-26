@@ -19,6 +19,9 @@
 
 package fr.arakne.utils.value.constant;
 
+import org.checkerframework.checker.index.qual.Positive;
+import org.checkerframework.dataflow.qual.Pure;
+
 /**
  * List of available character races
  */
@@ -50,7 +53,8 @@ public enum Race {
      *
      * @throws IndexOutOfBoundsException When an invalid id is given
      */
-    public static Race byId(int id) {
+    @Pure
+    public static Race byId(@Positive int id) {
         if (id >= values.length || id == 0) {
             throw new IndexOutOfBoundsException("Invalid race " + id);
         }

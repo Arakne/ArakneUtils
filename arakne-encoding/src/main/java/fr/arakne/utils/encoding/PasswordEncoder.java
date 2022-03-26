@@ -19,6 +19,10 @@
 
 package fr.arakne.utils.encoding;
 
+import org.checkerframework.checker.index.qual.LTLengthOf;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 /**
  * The password encoding algorithm for Dofus
  * The algo is a pseudo base 64 vigenere cypher implementation
@@ -51,6 +55,7 @@ public final class PasswordEncoder {
      *
      * @return The key
      */
+    @Pure
     public String key() {
         return key;
     }
@@ -64,6 +69,8 @@ public final class PasswordEncoder {
      *
      * @throws IllegalArgumentException When the encoded string is invalid, or the key is too small
      */
+    @SideEffectFree
+    @SuppressWarnings("assignment") // i / 2 is not resolved as key and decoded length
     public String decode(String encoded) {
         if (encoded.length() % 2 != 0) {
             throw new IllegalArgumentException("Invalid encoded string");
@@ -76,8 +83,8 @@ public final class PasswordEncoder {
         final char[] decoded = new char[encoded.length() / 2];
 
         // Iterate over pair chars
-        for (int i = 0; i < encoded.length(); i += 2) {
-            final int p = i / 2;
+        for (int i = 0; i < encoded.length() - 1; i += 2) {
+            final @LTLengthOf({"key", "decoded"}) int p = i / 2;
             final int k = key.charAt(p) % 64; // Get key char
 
             // Get two chars int value (divider and modulo)
@@ -114,6 +121,8 @@ public final class PasswordEncoder {
      *
      * @throws IllegalArgumentException When the password is too long
      */
+    @SideEffectFree
+    @SuppressWarnings({"argument", "array.access.unsafe.high"}) // Length are not resolved
     public String encode(String password) {
         if (key.length() < password.length()) {
             throw new IllegalArgumentException("The password is too long for the key");

@@ -19,6 +19,11 @@
 
 package fr.arakne.utils.encoding;
 
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.common.value.qual.IntRange;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 /**
  * Implementation of the Dofus network checksum
  *
@@ -38,8 +43,10 @@ public final class Checksum {
      *
      * @return The checksum of value
      */
-    public static int integer(String value) {
-        int checksum = 0;
+    @Pure
+    @SuppressWarnings("compound.assignment") // chatAt cannot be negative
+    public static @IntRange(from = 0, to = 15) int integer(String value) {
+        @NonNegative int checksum = 0;
 
         for (int i = 0; i < value.length(); ++i) {
             checksum += value.charAt(i) % 16;
@@ -56,6 +63,7 @@ public final class Checksum {
      *
      * @return The checksum of value
      */
+    @SideEffectFree
     public static String hexadecimal(String value) {
         return Integer.toHexString(integer(value)).toUpperCase();
     }
@@ -68,6 +76,7 @@ public final class Checksum {
      *
      * @return true if checksum match
      */
+    @Pure
     public static boolean verify(String input, int expectedChecksum) {
         return integer(input) == expectedChecksum;
     }
@@ -80,6 +89,7 @@ public final class Checksum {
      *
      * @return true if checksum match
      */
+    @Pure
     public static boolean verify(String input, String expectedChecksum) {
         return integer(input) == Integer.parseInt(expectedChecksum, 16);
     }

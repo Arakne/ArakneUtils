@@ -21,11 +21,13 @@ package fr.arakne.utils.maps.path;
 
 import fr.arakne.utils.maps.MapCell;
 import fr.arakne.utils.maps.constant.Direction;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Step for a path
  */
-public final class PathStep<C extends MapCell<C>> {
+public final class PathStep<C extends @NonNull MapCell<C>> {
     private final C cell;
     private final Direction direction;
 
@@ -41,6 +43,7 @@ public final class PathStep<C extends MapCell<C>> {
     /**
      * @return The cell
      */
+    @Pure
     public C cell() {
         return cell;
     }
@@ -48,6 +51,7 @@ public final class PathStep<C extends MapCell<C>> {
     /**
      * @return The direction
      */
+    @Pure
     public Direction direction() {
         return direction;
     }

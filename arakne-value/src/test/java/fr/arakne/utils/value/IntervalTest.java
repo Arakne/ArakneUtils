@@ -53,7 +53,6 @@ class IntervalTest {
         assertEquals(5, new Interval(10, 15).amplitude());
         assertEquals(0, new Interval(10, 10).amplitude());
         assertEquals(20, new Interval(0, 20).amplitude());
-        assertEquals(15, new Interval(-20, -5).amplitude());
     }
 
     @Test
@@ -107,10 +106,11 @@ class IntervalTest {
     }
 
     @Test
+    @SuppressWarnings("return")
     void mapShouldReorderTransformedBoundaries() {
-        Interval res = Interval.of(10, 20).map(i -> -i);
+        Interval res = Interval.of(10, 20).map(i -> 100 - i);
 
-        assertEquals(new Interval(-20, -10), res);
+        assertEquals(new Interval(80, 90), res);
     }
 
     @Test

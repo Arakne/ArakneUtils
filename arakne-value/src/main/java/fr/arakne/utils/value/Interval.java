@@ -19,6 +19,10 @@
 
 package fr.arakne.utils.value;
 
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+
 import java.util.Objects;
 import java.util.function.IntUnaryOperator;
 
@@ -29,8 +33,8 @@ import java.util.function.IntUnaryOperator;
  * Note: This is an immutable value object
  */
 public final class Interval {
-    private final int min;
-    private final int max;
+    private final @NonNegative int min;
+    private final @NonNegative int max;
 
     /**
      * @param min Minimal value of the interval
@@ -38,7 +42,7 @@ public final class Interval {
      *
      * @throws IllegalArgumentException When max is lower than min
      */
-    public Interval(int min, int max) {
+    public Interval(@NonNegative int min, @NonNegative int max) {
         if (max < min) {
             throw new IllegalArgumentException("max must be higher than min");
         }
@@ -52,7 +56,8 @@ public final class Interval {
      *
      * @return The min value
      */
-    public int min() {
+    @Pure
+    public @NonNegative int min() {
         return min;
     }
 
@@ -61,7 +66,8 @@ public final class Interval {
      *
      * @return The max value
      */
-    public int max() {
+    @Pure
+    public @NonNegative int max() {
         return max;
     }
 
@@ -71,6 +77,7 @@ public final class Interval {
      *
      * @return The average, in double
      */
+    @Pure
     public double average() {
         return (min + max) / 2d;
     }
@@ -82,7 +89,9 @@ public final class Interval {
      *
      * @return The amplitude. Must be a positive integer
      */
-    public int amplitude() {
+    @Pure
+    @SuppressWarnings("return") // max is always >= to min
+    public @NonNegative int amplitude() {
         return max - min;
     }
 
@@ -94,6 +103,7 @@ public final class Interval {
      *
      * @return true if value is in the interface
      */
+    @Pure
     public boolean contains(int value) {
         return value >= min && value <= max;
     }
@@ -103,6 +113,7 @@ public final class Interval {
      *
      * @return true if it's a singleton
      */
+    @Pure
     public boolean isSingleton() {
         return min == max;
     }
@@ -133,7 +144,7 @@ public final class Interval {
      *
      * @return The new transformed interval
      */
-    public Interval map(IntUnaryOperator transformer) {
+    public Interval map(NonNegativeIntUnaryOperator transformer) {
         if (isSingleton()) {
             return Interval.of(transformer.applyAsInt(min));
         }
@@ -150,7 +161,7 @@ public final class Interval {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (!(obj instanceof Interval)) {
             return false;
         }
@@ -172,7 +183,7 @@ public final class Interval {
      *
      * @return The new Interval instance
      */
-    public static Interval of(int value) {
+    public static Interval of(@NonNegative int value) {
         return new Interval(value, value);
     }
 
@@ -185,11 +196,25 @@ public final class Interval {
      *
      * @return The new Interval instance
      */
-    public static Interval of(int a, int b) {
+    public static Interval of(@NonNegative int a, @NonNegative int b) {
         if (a > b) {
             return new Interval(b, a);
         }
 
         return new Interval(a, b);
+    }
+
+    /**
+     * Duplicate of {@link IntUnaryOperator} but for NonNegative integer
+     */
+    @FunctionalInterface
+    public interface NonNegativeIntUnaryOperator {
+        /**
+         * Applies this operator to the given operand.
+         *
+         * @param operand the operand
+         * @return the operator result
+         */
+        public @NonNegative int applyAsInt(@NonNegative int operand);
     }
 }

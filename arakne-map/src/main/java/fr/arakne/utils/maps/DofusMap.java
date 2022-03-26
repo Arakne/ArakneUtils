@@ -20,19 +20,24 @@
 package fr.arakne.utils.maps;
 
 import fr.arakne.utils.value.Dimensions;
+import org.checkerframework.checker.index.qual.IndexFor;
+import org.checkerframework.checker.index.qual.LengthOf;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Base dofus map type
  *
  * @param <C> The cell type
  */
-public interface DofusMap<C extends MapCell<C>> {
+public interface DofusMap<C extends @NonNull MapCell<C>> {
     /**
      * Get the map size (the number of cells)
      *
      * @return The map size
      */
-    public int size();
+    @Pure
+    public @LengthOf("this") int size();
 
     /**
      * Get a cell by its id
@@ -41,12 +46,13 @@ public interface DofusMap<C extends MapCell<C>> {
      *
      * @return The cell
      */
-    public C get(int id);
+    public C get(@IndexFor("this") int id);
 
     /**
      * Get the map dimensions
      *
      * @return The dimensions
      */
+    @Pure
     public Dimensions dimensions();
 }

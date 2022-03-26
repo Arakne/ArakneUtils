@@ -20,6 +20,7 @@
 package fr.arakne.utils.maps.serializer;
 
 import fr.arakne.utils.maps.constant.CellMovement;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Data for a single map cell
@@ -30,6 +31,7 @@ public interface CellData {
      *
      * @return false if block line of sight
      */
+    @Pure
     public boolean lineOfSight();
 
     /**
@@ -38,6 +40,7 @@ public interface CellData {
      *
      * @return The movement value
      */
+    @Pure
     public CellMovement movement();
 
     /**
@@ -45,6 +48,7 @@ public interface CellData {
      *
      * @return true if the cell if active
      */
+    @Pure
     public boolean active();
 
     /**

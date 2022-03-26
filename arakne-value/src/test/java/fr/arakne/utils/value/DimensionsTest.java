@@ -36,7 +36,7 @@ class DimensionsTest {
     void equals() {
         Dimensions dimensions = new Dimensions(12, 15);
 
-        assertNotEquals(dimensions, null);
+        assertFalse(dimensions.equals(null));
         assertNotEquals(dimensions, new Object());
         assertNotEquals(dimensions, new Dimensions(15, 12));
 

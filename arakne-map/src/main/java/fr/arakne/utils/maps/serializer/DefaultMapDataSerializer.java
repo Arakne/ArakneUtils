@@ -22,6 +22,10 @@ package fr.arakne.utils.maps.serializer;
 import fr.arakne.utils.encoding.Base64;
 import fr.arakne.utils.encoding.Key;
 import fr.arakne.utils.maps.constant.CellMovement;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.common.value.qual.ArrayLen;
+import org.checkerframework.common.value.qual.IntRange;
+import org.checkerframework.common.value.qual.MinLen;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,9 +38,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class DefaultMapDataSerializer implements MapDataSerializer {
     private static final int CELL_DATA_LENGTH = 10;
 
-    private Map<String, ByteArrayCell> cache;
+    private @Nullable Map<@ArrayLen(CELL_DATA_LENGTH) String, ByteArrayCell> cache;
 
     @Override
+    @SuppressWarnings("argument") // Do not handle substring checks
     public CellData[] deserialize(String mapData) {
         if (mapData.length() % CELL_DATA_LENGTH != 0) {
             throw new IllegalArgumentException("Invalid map data");
@@ -46,7 +51,9 @@ public final class DefaultMapDataSerializer implements MapDataSerializer {
         final CellData[] cells = new CellData[size];
 
         for (int i = 0; i < size; ++i) {
-            cells[i] = deserializeCell(mapData.substring(i * CELL_DATA_LENGTH, (i + 1) * CELL_DATA_LENGTH));
+            final int startIndex = i * CELL_DATA_LENGTH;
+
+            cells[i] = deserializeCell(mapData.substring(startIndex, startIndex + CELL_DATA_LENGTH));
         }
 
         return cells;
@@ -102,11 +109,11 @@ public final class DefaultMapDataSerializer implements MapDataSerializer {
      *
      * @return The map serializer
      */
-    public MapDataSerializer withKey(String key) {
+    public MapDataSerializer withKey(@MinLen(2) String key) {
         return withKey(Key.parse(key));
     }
 
-    private CellData deserializeCell(String cellData) {
+    private CellData deserializeCell(@ArrayLen(CELL_DATA_LENGTH) String cellData) {
         if (cache == null) {
             return new ByteArrayCell(Base64.toBytes(cellData));
         }
@@ -114,8 +121,9 @@ public final class DefaultMapDataSerializer implements MapDataSerializer {
         return cache.computeIfAbsent(cellData, data -> new ByteArrayCell(Base64.toBytes(data)));
     }
 
+    @SuppressWarnings("assignment") // All assignations are safe
     private String serializeCell(CellData cell) {
-        final byte[] data = new byte[CELL_DATA_LENGTH];
+        final @IntRange(from = 0, to = 63) byte[] data = new byte[CELL_DATA_LENGTH];
 
         data[0] = (byte) ((cell.active() ? (1) : (0)) << 5);
         data[0] = (byte) (data[0] | (cell.lineOfSight() ? (1) : (0)));
@@ -144,9 +152,9 @@ public final class DefaultMapDataSerializer implements MapDataSerializer {
     }
 
     private static class ByteArrayCell implements CellData {
-        private final byte[] data;
+        private final byte @ArrayLen(CELL_DATA_LENGTH) [] data;
 
-        public ByteArrayCell(byte[] data) {
+        public ByteArrayCell(byte @ArrayLen(CELL_DATA_LENGTH) [] data) {
             this.data = data;
         }
 

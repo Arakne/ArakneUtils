@@ -19,6 +19,8 @@
 
 package fr.arakne.utils.maps.serializer;
 
+import org.checkerframework.dataflow.qual.Pure;
+
 /**
  * Data for a single cell layer
  */
@@ -28,6 +30,7 @@ public interface CellLayerData {
      *
      * @return int
      */
+    @Pure
     public int number();
 
     /**
@@ -35,6 +38,7 @@ public interface CellLayerData {
      *
      * @return int
      */
+    @Pure
     public int rotation();
 
     /**
@@ -42,6 +46,7 @@ public interface CellLayerData {
      *
      * @return bool
      */
+    @Pure
     public boolean flip();
 
     /**
@@ -49,6 +54,7 @@ public interface CellLayerData {
      *
      * @return bool
      */
+    @Pure
     public default boolean active() {
         return number() != 0;
     }

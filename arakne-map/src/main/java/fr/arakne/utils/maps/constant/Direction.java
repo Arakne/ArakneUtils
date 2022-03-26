@@ -19,6 +19,11 @@
 
 package fr.arakne.utils.maps.constant;
 
+import org.checkerframework.checker.index.qual.Positive;
+import org.checkerframework.common.value.qual.IntRange;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import java.util.Arrays;
 import java.util.function.Function;
 
@@ -34,6 +39,9 @@ public enum Direction {
     NORTH_WEST(width -> -width),
     NORTH(width -> -(2 * width - 1)),
     NORTH_EAST(width -> -(width - 1));
+
+    public static final char FIRST_CHAR = 'a';
+    public static final char LAST_CHAR = 'h';
 
     /**
      * Array of restricted directions (can be used on fight)
@@ -59,6 +67,7 @@ public enum Direction {
      *
      * @return The direction char value
      */
+    @Pure
     public char toChar() {
         return (char) (ordinal() + 'a');
     }
@@ -68,6 +77,8 @@ public enum Direction {
      *
      * @return The direction
      */
+    @Pure
+    @SuppressWarnings("array.access.unsafe.low")
     public Direction opposite() {
         return values[(ordinal() + 4) % 8];
     }
@@ -77,6 +88,8 @@ public enum Direction {
      *
      * @return The direction
      */
+    @Pure
+    @SuppressWarnings("array.access.unsafe.low")
     public Direction orthogonal() {
         return values[(ordinal() + 2) % 8];
     }
@@ -89,6 +102,7 @@ public enum Direction {
      *
      * @return true if the direction can be used when restrictions are enabled
      */
+    @Pure
     public boolean restricted() {
         return ordinal() % 2 == 1;
     }
@@ -104,7 +118,8 @@ public enum Direction {
      *
      * @return The next cell id increment
      */
-    public int nextCellIncrement(int mapWidth) {
+    @Pure
+    public int nextCellIncrement(@Positive int mapWidth) {
         return computeNextCell.apply(mapWidth);
     }
 
@@ -114,8 +129,9 @@ public enum Direction {
      * @param c The direction character value
      * @return The direction
      */
-    public static Direction byChar(char c) {
-        return values[c - 'a'];
+    @Pure
+    public static Direction byChar(@IntRange(from = FIRST_CHAR, to = LAST_CHAR) char c) {
+        return values[c - FIRST_CHAR];
     }
 
     /**
@@ -124,6 +140,7 @@ public enum Direction {
      *
      * @return The array of Direction
      */
+    @SideEffectFree
     public static Direction[] restrictedDirections() {
         return restricted.clone();
     }

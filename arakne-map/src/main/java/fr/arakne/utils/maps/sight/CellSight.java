@@ -22,6 +22,7 @@ package fr.arakne.utils.maps.sight;
 import fr.arakne.utils.maps.BattlefieldCell;
 import fr.arakne.utils.maps.CoordinateCell;
 import fr.arakne.utils.maps.DofusMap;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,7 +35,7 @@ import java.util.function.BiConsumer;
  *
  * @param <C> The cell type
  */
-public final class CellSight<C extends BattlefieldCell<C>> {
+public final class CellSight<C extends @NonNull BattlefieldCell<C>> {
     private final BattlefieldSight<C> battlefield;
     private final CoordinateCell<C> source;
 

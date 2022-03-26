@@ -19,6 +19,8 @@
 
 package fr.arakne.utils.maps.serializer;
 
+import org.checkerframework.dataflow.qual.Pure;
+
 /**
  * Cell layer data for the interactive object, or "object2"
  */
@@ -26,6 +28,7 @@ public interface InteractiveObjectData extends CellLayerData {
     /**
      * Rotation is not supported by the layerObject2
      */
+    @Pure
     @Override
     public default int rotation() {
         return 0;
@@ -36,5 +39,6 @@ public interface InteractiveObjectData extends CellLayerData {
      *
      * @return true if the layer contains an interactive object
      */
+    @Pure
     public boolean interactive();
 }

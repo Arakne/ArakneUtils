@@ -19,6 +19,8 @@
 
 package fr.arakne.utils.value.constant;
 
+import org.checkerframework.dataflow.qual.Pure;
+
 /**
  * Character gender
  */
@@ -33,6 +35,7 @@ public enum Gender {
      *
      * @return The Gender
      */
+    @Pure
     public static Gender parse(String value) {
         if ("0".equals(value)) {
             return MALE;

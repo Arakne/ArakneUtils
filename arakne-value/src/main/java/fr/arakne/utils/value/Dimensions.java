@@ -19,16 +19,20 @@
 
 package fr.arakne.utils.value;
 
+import org.checkerframework.checker.index.qual.Positive;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+
 import java.util.Objects;
 
 /**
  * Dimensions for 2D object
  */
 public final class Dimensions {
-    private final int width;
-    private final int height;
+    private final @Positive int width;
+    private final @Positive int height;
 
-    public Dimensions(int width, int height) {
+    public Dimensions(@Positive int width, @Positive int height) {
         this.width = width;
         this.height = height;
     }
@@ -38,7 +42,8 @@ public final class Dimensions {
      *
      * @return The width
      */
-    public int width() {
+    @Pure
+    public @Positive int width() {
         return width;
     }
 
@@ -47,12 +52,13 @@ public final class Dimensions {
      *
      * @return The height
      */
-    public int height() {
+    @Pure
+    public @Positive int height() {
         return height;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) {
             return true;
         }

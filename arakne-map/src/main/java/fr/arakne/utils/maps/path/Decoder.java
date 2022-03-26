@@ -23,13 +23,16 @@ import fr.arakne.utils.encoding.Base64;
 import fr.arakne.utils.maps.DofusMap;
 import fr.arakne.utils.maps.MapCell;
 import fr.arakne.utils.maps.constant.Direction;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 import java.util.Optional;
 
 /**
  * Decode map data like paths or directions
  */
-public final class Decoder<C extends MapCell<C>> {
+public final class Decoder<C extends @NonNull MapCell<C>> {
     private final DofusMap<C> map;
 
     /**
@@ -69,7 +72,7 @@ public final class Decoder<C extends MapCell<C>> {
      *
      * @throws PathException When an invalid path is given
      */
-    public Path<C> decode(String encoded, C start) throws PathException {
+    public Path<C> decode(String encoded, @Nullable C start) throws PathException {
         if (encoded.length() % 3 != 0) {
             throw new PathException("Invalid path : bad length");
         }
@@ -81,9 +84,15 @@ public final class Decoder<C extends MapCell<C>> {
             path.add(new PathStep<>(start, Direction.EAST));
         }
 
-        for (int i = 0; i < encoded.length(); i += 3) {
-            final Direction direction = Direction.byChar(encoded.charAt(i));
-            final int cell = (Base64.ord(encoded.charAt(i + 1)) & 15) << 6 | Base64.ord(encoded.charAt(i + 2));
+        for (int i = 0; i < encoded.length() - 2; i += 3) {
+            final char directionChar = encoded.charAt(i);
+
+            if (directionChar < Direction.FIRST_CHAR || directionChar > Direction.LAST_CHAR) {
+                throw new PathException("Invalid direction");
+            }
+
+            final Direction direction = Direction.byChar(directionChar);
+            final int cell = ((Base64.ord(encoded.charAt(i + 1)) & 15) << 6) + Base64.ord(encoded.charAt(i + 2));
 
             if (cell >= map.size()) {
                 throw new PathException("Invalid cell number");
@@ -180,10 +189,11 @@ public final class Decoder<C extends MapCell<C>> {
      * Encode the computed path
      *
      * @param path The path to encode
-     * @param includeStartCell Does the encoded path should contains the start cell or not ?
+     * @param includeStartCell Does the encoded path should contain the start cell or not ?
      *
      * @return The encoded path
      */
+    @SideEffectFree
     private String encode(Path<C> path, boolean includeStartCell) {
         final StringBuilder encoded = new StringBuilder(path.size() * 3);
 

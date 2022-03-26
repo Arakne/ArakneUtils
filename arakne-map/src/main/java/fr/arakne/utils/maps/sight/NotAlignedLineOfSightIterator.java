@@ -21,6 +21,7 @@ package fr.arakne.utils.maps.sight;
 
 import fr.arakne.utils.maps.BattlefieldCell;
 import fr.arakne.utils.maps.CoordinateCell;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Iterator;
 
@@ -29,7 +30,7 @@ import java.util.Iterator;
  *
  * @param <C> The cell type
  */
-final class NotAlignedLineOfSightIterator<C extends BattlefieldCell<C>> implements Iterator<C> {
+final class NotAlignedLineOfSightIterator<C extends @NonNull BattlefieldCell<C>> implements Iterator<C> {
     private final BattlefieldSight<C> battlefield;
     private final CoordinateCell<C> source;
     private final CoordinateCell<C> target;

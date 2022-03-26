@@ -19,6 +19,11 @@
 
 package fr.arakne.utils.encoding;
 
+import org.checkerframework.checker.index.qual.Positive;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.common.value.qual.MinLen;
+import org.checkerframework.dataflow.qual.Pure;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -29,17 +34,18 @@ import java.security.SecureRandom;
  * Handle key for Dofus packets
  */
 public final class Key {
-    private static SecureRandom random;
+    private static @MonotonicNonNull SecureRandom random;
 
-    private final String key;
-    private XorCipher cipher;
+    private final @MinLen(1) String key;
+    private @MonotonicNonNull XorCipher cipher;
 
-    public Key(String key) {
+    public Key(@MinLen(1) String key) {
         this.key = key;
     }
 
+    @Pure
     @Override
-    public String toString() {
+    public @MinLen(1) String toString() {
         return key;
     }
 
@@ -49,6 +55,7 @@ public final class Key {
      *
      * @return The cipher instance
      */
+    @Pure
     public XorCipher cipher() {
         if (cipher == null) {
             cipher = new XorCipher(key);
@@ -63,6 +70,7 @@ public final class Key {
      * @return The encoded key
      * @see Key#parse(String) For parse the encoded key
      */
+    @Pure
     public String encode() {
         final String raw;
 
@@ -101,14 +109,16 @@ public final class Key {
      *
      * @see Key#encode() For generate the hexadecimal string
      */
-    public static Key parse(String input) {
+    @Pure
+    @SuppressWarnings({"array.access.unsafe.high", "argument"}) // i / 2 index not resolved, and URLDecoder.decode do not handle string length
+    public static Key parse(@MinLen(2) String input) {
         if (input.length() % 2 != 0) {
             throw new IllegalArgumentException("Invalid key");
         }
 
         final char[] keyArr = new char[input.length() / 2];
 
-        for (int i = 0; i < input.length(); i += 2) {
+        for (int i = 0; i < input.length() - 1; i += 2) {
             keyArr[i / 2] = (char) Integer.parseInt(input.substring(i, i + 2), 16);
         }
 
@@ -137,7 +147,7 @@ public final class Key {
      *
      * @return The generated key
      */
-    public static Key generate(int size) {
+    public static Key generate(@Positive int size) {
         if (random == null) {
             random = new SecureRandom();
         }
@@ -154,7 +164,7 @@ public final class Key {
      *
      * @return The generated key
      */
-    public static Key generate(int size, SecureRandom random) {
+    public static Key generate(@Positive int size, SecureRandom random) {
         final char[] keyArr = new char[size];
 
         for (int i = 0; i < size; ++i) {
