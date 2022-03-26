@@ -47,6 +47,25 @@ jobs:
 
       - name: Run tests
         run: mvn --batch-mode -Djacoco.skip=true -P '!checkerframework,!checkerframework-jdk8,!checkerframework-jdk9orlater' test
+
+  mutation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: "Europe/Paris"
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+
+      - name: Run pitest
+        run: mvn pitest:mutationCoverage -P '!checkerframework,!checkerframework-jdk8,!checkerframework-jdk9orlater' verify
+
 #
 #  static_analysis:
 #    runs-on: ubuntu-latest
