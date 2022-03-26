@@ -64,7 +64,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Run pitest
-        run: mvn pitest:mutationCoverage -P '!checkerframework,!checkerframework-jdk8,!checkerframework-jdk9orlater' verify
+        run: mvn -P '!checkerframework,!checkerframework-jdk8,!checkerframework-jdk9orlater' compile test-compile pitest:mutationCoverage
 
 #
 #  static_analysis:
