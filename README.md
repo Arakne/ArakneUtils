@@ -1,4 +1,4 @@
-# ArakneUtils [![Build Status](https://scrutinizer-ci.com/g/Arakne/ArakneUtils/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Arakne/ArakneUtils/build-status/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Arakne/ArakneUtils/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Arakne/ArakneUtils/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/Arakne/ArakneUtils/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Arakne/ArakneUtils/?branch=master)
+# ArakneUtils [![Java CI](https://github.com/Arakne/ArakneUtils/actions/workflows/ci.yaml/badge.svg)](https://github.com/Arakne/ArakneUtils/actions/workflows/ci.yaml) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Arakne/ArakneUtils/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Arakne/ArakneUtils/?branch=master) [![codecov](https://codecov.io/gh/Arakne/ArakneUtils/branch/master/graph/badge.svg?token=CQZL28ORQI)](https://codecov.io/gh/Arakne/ArakneUtils)
 
 Common utilities and algorithm for Dofus 1.29 applications like server or bot in java.
 
