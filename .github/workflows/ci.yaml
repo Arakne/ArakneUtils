@@ -81,4 +81,4 @@ jobs:
           distribution: 'adopt'
 
       - name: Run tests
-        run: mvn clean compile
+        run: mvn clean compile test-compile

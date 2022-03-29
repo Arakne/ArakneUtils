@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RaceTest {
     @Test
+    @SuppressWarnings("argument") // allow testing byId(0)
     void byId() {
         assertSame(Race.ECAFLIP, Race.byId(6));
         assertSame(Race.PANDAWA, Race.byId(12));
