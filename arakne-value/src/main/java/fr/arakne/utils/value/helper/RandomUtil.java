@@ -117,7 +117,7 @@ public final class RandomUtil extends Random {
      * @return A random int
      */
     public @NonNegative int rand(@NonNegative int @MinLen(1) [] interval) {
-        if (interval.length == 1 || interval[0] > interval[1]) {
+        if (interval.length == 1 || interval[0] >= interval[1]) {
             return interval[0];
         }
 

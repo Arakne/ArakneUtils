@@ -74,6 +74,7 @@ class DecoderTest {
     @Test
     void decodePathBadDirection() {
         assertThrows(PathException.class, () -> decoder.decode("aaJ", map.get(100)), "Invalid path : bad direction");
+        assertThrows(PathException.class, () -> decoder.decode("_aJ", map.get(100)), "Invalid direction");
     }
 
     @Test

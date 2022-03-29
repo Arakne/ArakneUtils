@@ -66,6 +66,8 @@ class DirectionTest {
             new Direction[] {Direction.SOUTH_EAST, Direction.SOUTH_WEST, Direction.NORTH_WEST, Direction.NORTH_EAST},
             Direction.restrictedDirections()
         );
+
+        assertNotSame(Direction.restrictedDirections(), Direction.restrictedDirections());
     }
 
     @Test

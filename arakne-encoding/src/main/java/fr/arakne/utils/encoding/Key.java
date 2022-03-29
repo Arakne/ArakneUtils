@@ -168,7 +168,7 @@ public final class Key {
         final char[] keyArr = new char[size];
 
         for (int i = 0; i < size; ++i) {
-            keyArr[i] = (char) (random.nextInt(127 - 32) + 32);
+            keyArr[i] = (char) (random.nextInt(127 - 33) + 33);
         }
 
         return new Key(new String(keyArr));
