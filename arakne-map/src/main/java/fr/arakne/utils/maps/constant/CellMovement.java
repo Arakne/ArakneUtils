@@ -19,6 +19,9 @@
 
 package fr.arakne.utils.maps.constant;
 
+import org.checkerframework.common.value.qual.IntRange;
+import org.checkerframework.dataflow.qual.Pure;
+
 /**
  * Available movement values for a cell.
  * Contains information about the walkable state and path priority.
@@ -76,6 +79,7 @@ public enum CellMovement {
      *
      * @return true is the cel is walkable
      */
+    @Pure
     public boolean walkable() {
         return ordinal() > 1;
     }
@@ -86,7 +90,8 @@ public enum CellMovement {
      * @param value The movement id
      * @return The movement item
      */
-    public static CellMovement byValue(int value) {
+    @Pure
+    public static CellMovement byValue(@IntRange(from = 0, to = 7) int value) {
         return values[value];
     }
 }

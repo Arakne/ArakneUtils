@@ -20,6 +20,11 @@
 package fr.arakne.utils.value.helper;
 
 import fr.arakne.utils.value.Interval;
+import org.checkerframework.checker.index.qual.LessThan;
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.index.qual.Positive;
+import org.checkerframework.common.value.qual.IntRange;
+import org.checkerframework.common.value.qual.MinLen;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -69,7 +74,8 @@ public final class RandomUtil extends Random {
      *
      * @return A random int
      */
-    public int rand(int min, int max) {
+    @SuppressWarnings("return")
+    public @NonNegative @LessThan("#2 + 1") int rand(@NonNegative int min, @NonNegative int max) {
         if (max <= min) {
             return min;
         }
@@ -90,7 +96,7 @@ public final class RandomUtil extends Random {
      * @param interval The rand interval
      * @return A random int
      */
-    public int rand(Interval interval) {
+    public @NonNegative int rand(Interval interval) {
         return rand(interval.min(), interval.max());
     }
 
@@ -110,8 +116,8 @@ public final class RandomUtil extends Random {
      * @param interval An array of size 1 or 2. If the size is 1, return the array element, else return an array between interval[0] and interval[1] included
      * @return A random int
      */
-    public int rand(int[] interval) {
-        if (interval.length == 1 || interval[0] > interval[1]) {
+    public @NonNegative int rand(@NonNegative int @MinLen(1) [] interval) {
+        if (interval.length == 1 || interval[0] >= interval[1]) {
             return interval[0];
         }
 
@@ -127,7 +133,7 @@ public final class RandomUtil extends Random {
      *
      * @return A random boolean
      */
-    public boolean bool(int percent) {
+    public boolean bool(@IntRange(from = 0, to = 100) int percent) {
         return nextInt(100) < percent;
     }
 
@@ -156,7 +162,7 @@ public final class RandomUtil extends Random {
      *
      * @return The random boolean value
      */
-    public boolean reverseBool(int rate) {
+    public boolean reverseBool(@Positive int rate) {
         return nextInt(rate) == 0;
     }
 
@@ -169,7 +175,7 @@ public final class RandomUtil extends Random {
      *
      * @return One of the element of the array
      */
-    public <T> T of(T[] values) {
+    public <T> T of(T @MinLen(1) [] values) {
         return values[nextInt(values.length)];
     }
 
@@ -182,7 +188,7 @@ public final class RandomUtil extends Random {
      *
      * @see RandomUtil#of(Object[])
      */
-    public char of(char[] values) {
+    public char of(char @MinLen(1) [] values) {
         return values[nextInt(values.length)];
     }
 

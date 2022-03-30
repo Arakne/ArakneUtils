@@ -20,11 +20,13 @@
 package fr.arakne.utils.maps;
 
 import fr.arakne.utils.maps.sight.CellSight;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * Base type for a battlefield cell
  */
-public interface BattlefieldCell<C extends BattlefieldCell<C>> extends MapCell<C> {
+public interface BattlefieldCell<C extends @NonNull BattlefieldCell<C>> extends MapCell<C> {
     /**
      * Check if the cell block line of sight
      *
@@ -33,6 +35,7 @@ public interface BattlefieldCell<C extends BattlefieldCell<C>> extends MapCell<C
      * @see CellSight
      * @see BattlefieldCell#sight()
      */
+    @Pure
     public boolean sightBlocking();
 
     /**

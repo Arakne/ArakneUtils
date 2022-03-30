@@ -29,6 +29,10 @@ class KeyTest {
         assertEquals(128, Key.generate().toString().length());
         assertEquals(32, Key.generate(32).toString().length());
         assertNotEquals(Key.generate().toString(), Key.generate().toString());
+
+        String generated = Key.generate(2048).toString();
+
+        assertTrue(generated.matches("^[a-zA-Z0-9!\"#\\$%&'(=)*+,\\/:;<>?@\\\\\\[\\]\\^_`{}|~.-]+$"), "Invalid charset for key " + generated);
     }
 
     @Test

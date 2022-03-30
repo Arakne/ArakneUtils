@@ -28,6 +28,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings({"initialization.field.uninitialized", "array.access.unsafe.high", "array.access.unsafe.low"})
 class RandomUtilTest {
     private RandomUtil util;
 

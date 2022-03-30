@@ -22,9 +22,10 @@ package fr.arakne.utils.maps._test;
 import fr.arakne.utils.maps.AbstractCellDataAdapter;
 import fr.arakne.utils.maps.BattlefieldCell;
 import fr.arakne.utils.maps.serializer.CellData;
+import org.checkerframework.checker.index.qual.NonNegative;
 
 public class MyDofusCell extends AbstractCellDataAdapter<MyDofusMap, MyDofusCell> implements BattlefieldCell<MyDofusCell> {
-    public MyDofusCell(MyDofusMap map, CellData data, int id) {
+    public MyDofusCell(MyDofusMap map, CellData data, @NonNegative int id) {
         super(map, data, id);
     }
 

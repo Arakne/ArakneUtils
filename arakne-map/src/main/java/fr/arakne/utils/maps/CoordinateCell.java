@@ -20,6 +20,10 @@
 package fr.arakne.utils.maps;
 
 import fr.arakne.utils.maps.constant.Direction;
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 
 import java.util.Objects;
 
@@ -28,7 +32,7 @@ import java.util.Objects;
  *
  * https://github.com/Emudofus/Dofus/blob/1.29/ank/battlefield/utils/Pathfinding.as#L191
  */
-public final class CoordinateCell<C extends MapCell<C>> {
+public final class CoordinateCell<C extends @NonNull MapCell<C>> {
     private final C cell;
 
     private final int x;
@@ -59,6 +63,7 @@ public final class CoordinateCell<C extends MapCell<C>> {
      *
      * @return The base cell instance
      */
+    @Pure
     public C cell() {
         return cell;
     }
@@ -68,13 +73,15 @@ public final class CoordinateCell<C extends MapCell<C>> {
      *
      * @return The cell id
      */
-    public int id() {
+    @Pure
+    public @NonNegative int id() {
         return cell.id();
     }
 
     /**
      * @return The X coordinate of the cell
      */
+    @Pure
     public int x() {
         return x;
     }
@@ -82,6 +89,7 @@ public final class CoordinateCell<C extends MapCell<C>> {
     /**
      * @return The Y coordinate of the cell
      */
+    @Pure
     public int y() {
         return y;
     }
@@ -94,6 +102,7 @@ public final class CoordinateCell<C extends MapCell<C>> {
      *
      * @return true if coordinates match, or false otherwise
      */
+    @Pure
     public boolean is(int x, int y) {
         return this.x == x && this.y == y;
     }
@@ -106,6 +115,7 @@ public final class CoordinateCell<C extends MapCell<C>> {
      * @param target The target cell
      * @return The direction
      */
+    @Pure
     public Direction directionTo(CoordinateCell<C> target) {
         if (x == target.x) {
             if (target.y > y) {
@@ -140,7 +150,8 @@ public final class CoordinateCell<C extends MapCell<C>> {
      * @param target The target cell
      * @return The distance, in cells number
      */
-    public int distance(CoordinateCell<C> target) {
+    @Pure
+    public @NonNegative int distance(CoordinateCell<C> target) {
         return Math.abs(x - target.x) + Math.abs(y - target.y);
     }
 
@@ -152,12 +163,12 @@ public final class CoordinateCell<C extends MapCell<C>> {
      * @param target The target cell
      * @return The distance, in cells number
      */
-    public int distance(C target) {
+    public @NonNegative int distance(C target) {
         return distance(target.coordinate());
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) {
             return true;
         }

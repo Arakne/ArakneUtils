@@ -19,6 +19,10 @@
 
 package fr.arakne.utils.maps;
 
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.dataflow.qual.Pure;
+
 /**
  * Base type for a dofus map cell
  * Usage :
@@ -31,19 +35,21 @@ package fr.arakne.utils.maps;
  *
  * @param <C> Should be the cell class it-self
  */
-public interface MapCell<C extends MapCell<C>> {
+public interface MapCell<C extends @NonNull MapCell<C>> {
     /**
      * Get the cell id
      *
      * @return The cell id. Starts at 0
      */
-    public int id();
+    @Pure
+    public @NonNegative int id();
 
     /**
      * Check if the cell is walkable
      *
      * @return true if walkable
      */
+    @Pure
     public boolean walkable();
 
     /**
@@ -51,6 +57,7 @@ public interface MapCell<C extends MapCell<C>> {
      *
      * @return The parent DofusMap
      */
+    @Pure
     public DofusMap<C> map();
 
     /**

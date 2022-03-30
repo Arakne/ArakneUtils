@@ -20,6 +20,10 @@
 package fr.arakne.utils.maps;
 
 import fr.arakne.utils.maps.serializer.CellData;
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 
 import java.util.Objects;
 
@@ -29,39 +33,42 @@ import java.util.Objects;
  * @param <M> The DofusMap class
  * @param <C> Should be the cell class it-self
  */
-public abstract class AbstractCellDataAdapter<M extends DofusMap<C>, C extends MapCell<C>> implements MapCell<C> {
+public abstract class AbstractCellDataAdapter<M extends @NonNull DofusMap<C>, C extends @NonNull MapCell<C>> implements MapCell<C> {
     protected final CellData data;
     private final M map;
-    private final int id;
+    private final @NonNegative int id;
 
     /**
      * @param map The container map
      * @param data The cell data
      * @param id The cell id
      */
-    public AbstractCellDataAdapter(M map, CellData data, int id) {
+    public AbstractCellDataAdapter(M map, CellData data, @NonNegative int id) {
         this.map = map;
         this.data = data;
         this.id = id;
     }
 
+    @Pure
     @Override
-    public final int id() {
+    public final @NonNegative int id() {
         return id;
     }
 
+    @Pure
     @Override
     public final boolean walkable() {
         return data.active() && data.movement().walkable();
     }
 
+    @Pure
     @Override
     public final M map() {
         return map;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) {
             return true;
         }

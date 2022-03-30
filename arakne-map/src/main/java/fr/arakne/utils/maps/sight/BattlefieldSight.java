@@ -22,6 +22,8 @@ package fr.arakne.utils.maps.sight;
 import fr.arakne.utils.maps.BattlefieldCell;
 import fr.arakne.utils.maps.CoordinateCell;
 import fr.arakne.utils.maps.DofusMap;
+import org.checkerframework.checker.index.qual.Positive;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Utility class for compute line of sights
@@ -39,9 +41,9 @@ import fr.arakne.utils.maps.DofusMap;
  *
  * @param <C> The battlefield cell type
  */
-public final class BattlefieldSight<C extends BattlefieldCell<C>> {
+public final class BattlefieldSight<C extends @NonNull BattlefieldCell<C>> {
     private final DofusMap<C> battlefield;
-    private final int width; // store map width for optimisation
+    private final @Positive int width; // store map width for optimisation
 
     public BattlefieldSight(DofusMap<C> battlefield) {
         this.battlefield = battlefield;
@@ -144,6 +146,7 @@ public final class BattlefieldSight<C extends BattlefieldCell<C>> {
     /**
      * Get a cell by its coordinates
      */
+    @SuppressWarnings("argument") // Consider x and y as safe
     C getCellByCoordinates(int x, int y) {
         // https://github.com/Emudofus/Dofus/blob/1.29/ank/battlefield/utils/Pathfinding.as#L550
         return battlefield.get(x * width + y * (width - 1));

@@ -19,6 +19,12 @@
 
 package fr.arakne.utils.encoding;
 
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.index.qual.PolyLength;
+import org.checkerframework.common.value.qual.IntRange;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 /**
  * Utility class for Dofus Pseudo base 64
  */
@@ -48,7 +54,8 @@ public final class Base64 {
      * @see Base64#ord(char) For perform the opposite operation
      * @see Base64#decode(String) For decode an int string
      */
-    public static int ord(char c) {
+    @Pure
+    public static @IntRange(from = 0, to = 63) int ord(char c) {
         if (c >= 'a' && c <= 'z') {
             return c - 'a';
         }
@@ -86,7 +93,8 @@ public final class Base64 {
      * @see Base64#ord(char) For perform the opposite operation
      * @see Base64#encode(int, int) For encode a 32 bits integer to a string
      */
-    public static char chr(int value) {
+    @Pure
+    public static char chr(@IntRange(from = 0, to = 63) int value) {
         return CHARSET[value];
     }
 
@@ -97,7 +105,8 @@ public final class Base64 {
      * @param value Value to encode.
      * @return Encoded value
      */
-    public static char chrMod(int value) {
+    @Pure
+    public static char chrMod(@NonNegative int value) {
         return CHARSET[value % CHARSET.length];
     }
 
@@ -117,7 +126,8 @@ public final class Base64 {
      *
      * @throws IllegalArgumentException When the length parameter is invalid
      */
-    public static String encode(int value, int length) {
+    @SideEffectFree
+    public static String encode(int value, @IntRange(from = 1, to = 6) int length) {
         if (length < 1 || length > 6) {
             throw new IllegalArgumentException("Invalid length parameter : it must be in range [1-6]");
         }
@@ -146,7 +156,9 @@ public final class Base64 {
      *
      * @see Base64#toBytes(String) For the opposite operation
      */
-    public static String encode(byte[] data) {
+    @SideEffectFree
+    @SuppressWarnings("return") // Checker do not resolve the length
+    public static @PolyLength String encode(@IntRange(from = 0, to = 63) byte @PolyLength [] data) {
         final char[] encoded = new char[data.length];
 
         for (int i = 0; i < data.length; ++i) {
@@ -170,6 +182,7 @@ public final class Base64 {
      *
      * @throws IllegalArgumentException When an invalid string is given
      */
+    @Pure
     public static int decode(String encoded) {
         if (encoded.length() > 6) {
             throw new IllegalArgumentException("Invalid encoded string : too long");
@@ -198,7 +211,9 @@ public final class Base64 {
      *
      * @return The decode byte array. The array size will be the same as the string length
      */
-    public static byte[] toBytes(String encoded) {
+    @SideEffectFree
+    @SuppressWarnings("return") // Checker do not like polymorphism here
+    public static byte @PolyLength [] toBytes(@PolyLength String encoded) {
         final byte[] decoded = new byte[encoded.length()];
 
         for (int i = 0; i < encoded.length(); ++i) {

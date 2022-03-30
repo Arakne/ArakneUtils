@@ -20,6 +20,11 @@
 package fr.arakne.utils.maps.path;
 
 import fr.arakne.utils.maps.MapCell;
+import org.checkerframework.checker.index.qual.LengthOf;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.PolyNull;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,7 +36,7 @@ import java.util.function.Predicate;
  * Path for dofus map
  * @param <C> The cell type
  */
-public final class Path<C extends MapCell<C>> implements Collection<PathStep<C>> {
+public final class Path<C extends @NonNull MapCell<C>> implements Collection<PathStep<C>> {
     private final Decoder<C> decoder;
     private final List<PathStep<C>> steps;
 
@@ -59,6 +64,7 @@ public final class Path<C extends MapCell<C>> implements Collection<PathStep<C>>
      * @param step The step number. The step zero is the current cell, The step (size - 1) is the last step (target)
      * @return The required step
      */
+    @Pure
     public PathStep<C> get(int step) {
         return steps.get(step);
     }
@@ -69,6 +75,7 @@ public final class Path<C extends MapCell<C>> implements Collection<PathStep<C>>
      * @return The first step
      * @see Path#start() For get the start cell
      */
+    @Pure
     public PathStep<C> first() {
         return steps.get(0);
     }
@@ -79,6 +86,7 @@ public final class Path<C extends MapCell<C>> implements Collection<PathStep<C>>
      * @return The last step
      * @see Path#target() For get the last cell
      */
+    @Pure
     public PathStep<C> last() {
         return steps.get(steps.size() - 1);
     }
@@ -88,6 +96,7 @@ public final class Path<C extends MapCell<C>> implements Collection<PathStep<C>>
      *
      * @return The start cell
      */
+    @Pure
     public C start() {
         return first().cell();
     }
@@ -97,6 +106,7 @@ public final class Path<C extends MapCell<C>> implements Collection<PathStep<C>>
      *
      * @return The end cell
      */
+    @Pure
     public C target() {
         return last().cell();
     }
@@ -106,6 +116,7 @@ public final class Path<C extends MapCell<C>> implements Collection<PathStep<C>>
      *
      * @return The encoded path
      */
+    @SideEffectFree
     public String encode() {
         return decoder.encode(this);
     }
@@ -116,6 +127,7 @@ public final class Path<C extends MapCell<C>> implements Collection<PathStep<C>>
      * @return The encoded path
      * @see Decoder#encodeWithStartCell(Path)
      */
+    @SideEffectFree
     public String encodeWithStartCell() {
         return decoder.encodeWithStartCell(this);
     }
@@ -156,16 +168,19 @@ public final class Path<C extends MapCell<C>> implements Collection<PathStep<C>>
         return new Path<>(decoder, steps.subList(0, newSize));
     }
 
+    @Pure
     @Override
-    public int size() {
+    public @LengthOf("this") int size() {
         return steps.size();
     }
 
+    @Pure
     @Override
     public boolean isEmpty() {
         return steps.isEmpty();
     }
 
+    @Pure
     @Override
     public boolean contains(Object o) {
         return steps.contains(o);
@@ -182,7 +197,8 @@ public final class Path<C extends MapCell<C>> implements Collection<PathStep<C>>
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    @SuppressWarnings({"return", "toarray.nullable.elements.not.newarray"})
+    public <T> @PolyNull T[] toArray(@PolyNull T @NonNull[] a) {
         return steps.toArray(a);
     }
 

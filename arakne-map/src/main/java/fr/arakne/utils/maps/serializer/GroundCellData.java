@@ -19,6 +19,8 @@
 
 package fr.arakne.utils.maps.serializer;
 
+import org.checkerframework.dataflow.qual.Pure;
+
 /**
  * Data for the ground layer of a cell
  */
@@ -28,6 +30,7 @@ public interface GroundCellData extends CellLayerData {
      *
      * @return The level as int
      */
+    @Pure
     public int level();
 
     /**
@@ -35,5 +38,6 @@ public interface GroundCellData extends CellLayerData {
      *
      * @return The slope as int
      */
+    @Pure
     public int slope();
 }

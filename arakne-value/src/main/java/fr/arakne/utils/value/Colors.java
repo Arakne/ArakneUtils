@@ -20,6 +20,10 @@
 package fr.arakne.utils.value;
 
 import fr.arakne.utils.value.helper.RandomUtil;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.common.value.qual.IntRange;
+import org.checkerframework.dataflow.qual.Pure;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -35,13 +39,14 @@ import java.util.stream.Stream;
  */
 public final class Colors {
     public static final Colors DEFAULT = new Colors(-1, -1, -1);
-    private static RandomUtil random;
+    public static final int MAX_COLOR_VALUE = 16777215;
+    private static @MonotonicNonNull RandomUtil random;
 
-    private final int color1;
-    private final int color2;
-    private final int color3;
+    private final @IntRange(from = -1, to = MAX_COLOR_VALUE) int color1;
+    private final @IntRange(from = -1, to = MAX_COLOR_VALUE) int color2;
+    private final @IntRange(from = -1, to = MAX_COLOR_VALUE) int color3;
 
-    public Colors(int color1, int color2, int color3) {
+    public Colors(@IntRange(from = -1, to = MAX_COLOR_VALUE) int color1, @IntRange(from = -1, to = MAX_COLOR_VALUE) int color2, @IntRange(from = -1, to = MAX_COLOR_VALUE) int color3) {
         this.color1 = color1;
         this.color2 = color2;
         this.color3 = color3;
@@ -50,21 +55,24 @@ public final class Colors {
     /**
      * @return The first sprite color
      */
-    public int color1() {
+    @Pure
+    public @IntRange(from = -1, to = MAX_COLOR_VALUE) int color1() {
         return color1;
     }
 
     /**
      * @return The second sprite color
      */
-    public int color2() {
+    @Pure
+    public @IntRange(from = -1, to = MAX_COLOR_VALUE) int color2() {
         return color2;
     }
 
     /**
      * @return The third sprite color
      */
-    public int color3() {
+    @Pure
+    public @IntRange(from = -1, to = MAX_COLOR_VALUE) int color3() {
         return color3;
     }
 
@@ -78,7 +86,8 @@ public final class Colors {
      *
      * @return The array representation of the color
      */
-    public int[] toArray() {
+    @Pure
+    public @IntRange(from = -1, to = MAX_COLOR_VALUE) int[] toArray() {
         return new int[] {color1, color2, color3};
     }
 
@@ -93,6 +102,7 @@ public final class Colors {
      *
      * @return The array representation of the color, in hexadecimal string
      */
+    @Pure
     public String[] toHexArray() {
         return hexStream().toArray(String[]::new);
     }
@@ -109,6 +119,7 @@ public final class Colors {
      * @param separator The separator to use between each colors
      * @return The hexadecimal CSV string
      */
+    @Pure
     public String toHexString(CharSequence separator) {
         return hexStream().collect(Collectors.joining(separator));
     }
@@ -133,16 +144,17 @@ public final class Colors {
      *
      * @return A new random Colors
      */
+    @SuppressWarnings("argument") // nextInt bounds are not correctly resolved
     public static Colors randomized(Random random) {
         return new Colors(
-            random.nextInt(16777216),
-            random.nextInt(16777216),
-            random.nextInt(16777216)
+            random.nextInt(MAX_COLOR_VALUE + 1),
+            random.nextInt(MAX_COLOR_VALUE + 1),
+            random.nextInt(MAX_COLOR_VALUE + 1)
         );
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) {
             return true;
         }
@@ -166,6 +178,7 @@ public final class Colors {
         return "Colors(" + color1 + ", " + color2 + ", " + color3 + ')';
     }
 
+    @Pure
     private Stream<String> hexStream() {
         return Arrays.stream(toArray()).mapToObj(value -> value == -1 ? "-1" : Integer.toHexString(value));
     }

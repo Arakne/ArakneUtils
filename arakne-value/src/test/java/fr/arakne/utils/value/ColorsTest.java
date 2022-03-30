@@ -77,7 +77,7 @@ class ColorsTest {
 
         assertEquals(colors, colors);
         assertEquals(colors, new Colors(123, 456, 789));
-        assertNotEquals(colors, null);
+        assertFalse(colors.equals(null));
         assertNotEquals(colors, new Colors(124, 456, 789));
         assertNotEquals(colors, new Colors(123, 455, 789));
         assertNotEquals(colors, new Colors(123, 456, 788));

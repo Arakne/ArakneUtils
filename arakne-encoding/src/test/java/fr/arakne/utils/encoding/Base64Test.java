@@ -58,6 +58,7 @@ class Base64Test {
     }
 
     @Test
+    @SuppressWarnings("argument")
     void encodeWithInvalidLength() {
         assertThrows(IllegalArgumentException.class, () -> Base64.encode(123, 0));
         assertThrows(IllegalArgumentException.class, () -> Base64.encode(123, 15));

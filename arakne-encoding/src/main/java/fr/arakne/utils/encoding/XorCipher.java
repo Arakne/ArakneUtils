@@ -19,6 +19,11 @@
 
 package fr.arakne.utils.encoding;
 
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.common.value.qual.MinLen;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -31,9 +36,9 @@ import java.nio.charset.StandardCharsets;
  * https://github.com/Emudofus/Dofus/blob/1.29/dofus/aks/Aks.as#L297
  */
 public final class XorCipher {
-    private final String key;
+    private final @MinLen(1) String key;
 
-    public XorCipher(String key) {
+    public XorCipher(@MinLen(1) String key) {
         this.key = key;
     }
 
@@ -42,12 +47,13 @@ public final class XorCipher {
      *
      * @return The key
      */
-    public String key() {
+    @Pure
+    public @MinLen(1) String key() {
         return key;
     }
 
     /**
-     * Encrypt the value using using the current key
+     * Encrypt the value using the current key
      * The encrypted value is an upper case hexadecimal string
      *
      * https://github.com/Emudofus/Dofus/blob/1.29/dofus/aks/Aks.as#L297
@@ -57,7 +63,9 @@ public final class XorCipher {
      *
      * @return Encrypted value
      */
-    public String encrypt(String value, int keyOffset) {
+    @SideEffectFree
+    @SuppressWarnings("cast.unsafe") // XOR will return an int, so cast to char cannot be checked
+    public String encrypt(String value, @NonNegative int keyOffset) {
         final String plain = escape(value);
         final StringBuilder encrypted = new StringBuilder(plain.length() * 2);
 
@@ -90,14 +98,19 @@ public final class XorCipher {
      * @throws IllegalArgumentException When an invalid string is given
      * @throws NumberFormatException When an invalid hexadecimal string is given
      */
-    public String decrypt(String value, int keyOffset) {
+    @SideEffectFree
+    @SuppressWarnings({
+        "cast.unsafe",  // XOR will return an int, so cast to char cannot be checked
+        "array.access.unsafe.high.range" // i / 2 is not correctly resolved
+    })
+    public String decrypt(String value, @NonNegative int keyOffset) {
         if (value.length() % 2 != 0) {
             throw new IllegalArgumentException("Invalid encrypted value");
         }
 
         final char[] decrypted = new char[value.length() / 2];
 
-        for (int i = 0; i < value.length(); i += 2) {
+        for (int i = 0; i < value.length() - 1; i += 2) {
             final char k = key.charAt((i / 2 + keyOffset) % key.length());
             final char c = (char) Integer.parseInt(value.substring(i, i + 2), 16);
 
@@ -116,6 +129,7 @@ public final class XorCipher {
      *
      * https://github.com/Emudofus/Dofus/blob/1.29/dofus/aks/Aks.as#L275
      */
+    @SideEffectFree
     private static String escape(String value) {
         final StringBuilder escaped = new StringBuilder(value.length());
 

@@ -22,6 +22,11 @@ package fr.arakne.utils.maps.path;
 import fr.arakne.utils.maps.CoordinateCell;
 import fr.arakne.utils.maps.MapCell;
 import fr.arakne.utils.maps.constant.Direction;
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.index.qual.Positive;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.util.NullnessUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,7 +52,7 @@ import java.util.function.Predicate;
  *     ;
  * </code>
  */
-public final class Pathfinder<C extends MapCell<C>> {
+public final class Pathfinder<C extends @NonNull MapCell<C>> {
     private final Decoder<C> decoder;
 
     /**
@@ -56,7 +61,7 @@ public final class Pathfinder<C extends MapCell<C>> {
      * @see Pathfinder#targetDistance(int)
      * @see Automaton#hasReachTarget()
      */
-    private int targetDistance = 0;
+    private @NonNegative int targetDistance = 0;
 
     /**
      * Predicate for check if the cell is walkable
@@ -66,7 +71,7 @@ public final class Pathfinder<C extends MapCell<C>> {
     /**
      * Function for compute the cell cost
      */
-    private Function<C, Integer> cellWeightFunction = cell -> 1;
+    private Function<C, @NonNegative Integer> cellWeightFunction = cell -> 1;
 
     /**
      * Available movements directions
@@ -77,7 +82,7 @@ public final class Pathfinder<C extends MapCell<C>> {
      * Maximum number of explored cells
      * Allow to fail when finding too complex path
      */
-    private int exploredCellLimit = Integer.MAX_VALUE;
+    private @Positive int exploredCellLimit = Integer.MAX_VALUE;
 
     /**
      * Does the first cell (source) should be added to the path ?
@@ -100,7 +105,7 @@ public final class Pathfinder<C extends MapCell<C>> {
      *
      * @return this instance
      */
-    public Pathfinder<C> targetDistance(int distance) {
+    public Pathfinder<C> targetDistance(@NonNegative int distance) {
         this.targetDistance = distance;
 
         return this;
@@ -131,7 +136,7 @@ public final class Pathfinder<C extends MapCell<C>> {
      *
      * @return this instance
      */
-    public Pathfinder<C> cellWeightFunction(Function<C, Integer> function) {
+    public Pathfinder<C> cellWeightFunction(Function<C, @NonNegative Integer> function) {
         this.cellWeightFunction = function;
 
         return this;
@@ -167,7 +172,7 @@ public final class Pathfinder<C extends MapCell<C>> {
      *
      * @return this instance
      */
-    public Pathfinder<C> exploredCellLimit(int limit) {
+    public Pathfinder<C> exploredCellLimit(@Positive int limit) {
         this.exploredCellLimit = limit;
 
         return this;
@@ -298,7 +303,7 @@ public final class Pathfinder<C extends MapCell<C>> {
                 throw new PathException("Limit exceeded for finding path");
             }
 
-            current = movements.poll();
+            current = NullnessUtil.castNonNull(movements.poll());
 
             final C cell = current.cell.cell();
 
@@ -390,12 +395,12 @@ public final class Pathfinder<C extends MapCell<C>> {
              * Previous step
              * Can be null in case of the first step (with cell = source)
              */
-            private final Step previous;
+            private final @Nullable Step previous;
 
             /**
              * Distance to the target cell, in number of cells
              */
-            private final int distance;
+            private final @NonNegative int distance;
 
             /**
              * Cost of the step
@@ -404,7 +409,7 @@ public final class Pathfinder<C extends MapCell<C>> {
              * The step cost is used to discourage usage of some cells (ex: cells near enemies, which can tackle),
              * and to store the total path cost to reach this step
              */
-            private final int cost;
+            private final @NonNegative int cost;
 
             /**
              * Creates the source cell
@@ -428,7 +433,7 @@ public final class Pathfinder<C extends MapCell<C>> {
              * @param previous The current step
              * @param cost The step cell cost. Should be 1 for normal cell
              */
-            private Step(CoordinateCell<C> cell, Direction direction, Step previous, int cost) {
+            private Step(CoordinateCell<C> cell, Direction direction, Step previous, @NonNegative int cost) {
                 this.cell = cell;
                 this.direction = direction;
                 this.previous = previous;
@@ -453,7 +458,7 @@ public final class Pathfinder<C extends MapCell<C>> {
              *
              * The heuristic is the total steps costs (from the begin, to the current step) + the remaining distance
              */
-            public int heuristic() {
+            public @NonNegative int heuristic() {
                 return distance + cost;
             }
 

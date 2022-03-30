@@ -23,21 +23,26 @@ import fr.arakne.utils.maps.DofusMap;
 import fr.arakne.utils.maps.serializer.CellData;
 import fr.arakne.utils.maps.serializer.DefaultMapDataSerializer;
 import fr.arakne.utils.value.Dimensions;
+import org.checkerframework.checker.index.qual.IndexFor;
+import org.checkerframework.checker.index.qual.LengthOf;
+import org.checkerframework.checker.index.qual.SameLen;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-public class MyDofusMap implements DofusMap<MyDofusCell> {
-    private final CellData[] cells;
+public class MyDofusMap implements DofusMap<@NonNull MyDofusCell> {
+    private final CellData @SameLen("this") [] cells;
 
+    @SuppressWarnings("assignment")
     public MyDofusMap(CellData[] cells) {
         this.cells = cells;
     }
 
     @Override
-    public int size() {
+    public @LengthOf("this") int size() {
         return cells.length;
     }
 
     @Override
-    public MyDofusCell get(int id) {
+    public MyDofusCell get(@IndexFor("this") int id) {
         return new MyDofusCell(this, cells[id], id);
     }
 
