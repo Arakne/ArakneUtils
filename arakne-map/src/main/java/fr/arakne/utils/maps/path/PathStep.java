@@ -27,7 +27,7 @@ import org.checkerframework.dataflow.qual.Pure;
 /**
  * Step for a path
  */
-public final class PathStep<C extends @NonNull MapCell<C>> {
+public final class PathStep<C extends @NonNull MapCell> {
     private final C cell;
     private final Direction direction;
 

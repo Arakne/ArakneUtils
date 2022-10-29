@@ -33,7 +33,7 @@ import java.util.Objects;
  * @param <M> The DofusMap class
  * @param <C> Should be the cell class it-self
  */
-public abstract class AbstractCellDataAdapter<M extends @NonNull DofusMap<C>, C extends @NonNull MapCell<C>> implements MapCell<C> {
+public abstract class AbstractCellDataAdapter<M extends @NonNull DofusMap, C extends @NonNull MapCell> implements MapCell<C> {
     protected final CellData data;
     private final M map;
     private final @NonNegative int id;

@@ -41,7 +41,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  *
  * @param <C> The battlefield cell type
  */
-public final class BattlefieldSight<C extends @NonNull BattlefieldCell<C>> {
+public final class BattlefieldSight<C extends @NonNull BattlefieldCell> {
     private final DofusMap<C> battlefield;
     private final @Positive int width; // store map width for optimisation
 

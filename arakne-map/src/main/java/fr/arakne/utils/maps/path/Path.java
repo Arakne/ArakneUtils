@@ -36,7 +36,7 @@ import java.util.function.Predicate;
  * Path for dofus map
  * @param <C> The cell type
  */
-public final class Path<C extends @NonNull MapCell<C>> implements Collection<PathStep<C>> {
+public final class Path<C extends @NonNull MapCell> implements Collection<PathStep<C>> {
     private final Decoder<C> decoder;
     private final List<PathStep<C>> steps;
 

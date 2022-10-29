@@ -32,7 +32,7 @@ import java.util.Optional;
 /**
  * Decode map data like paths or directions
  */
-public final class Decoder<C extends @NonNull MapCell<C>> {
+public final class Decoder<C extends @NonNull MapCell> {
     private final DofusMap<C> map;
 
     /**

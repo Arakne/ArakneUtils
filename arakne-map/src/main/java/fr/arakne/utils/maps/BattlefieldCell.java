@@ -26,7 +26,7 @@ import org.checkerframework.dataflow.qual.Pure;
 /**
  * Base type for a battlefield cell
  */
-public interface BattlefieldCell<C extends @NonNull BattlefieldCell<C>> extends MapCell<C> {
+public interface BattlefieldCell<C extends @NonNull BattlefieldCell> extends MapCell<C> {
     /**
      * Check if the cell block line of sight
      *

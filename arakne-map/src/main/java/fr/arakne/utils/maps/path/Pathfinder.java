@@ -52,7 +52,7 @@ import java.util.function.Predicate;
  *     ;
  * </code>
  */
-public final class Pathfinder<C extends @NonNull MapCell<C>> {
+public final class Pathfinder<C extends @NonNull MapCell> {
     private final Decoder<C> decoder;
 
     /**
