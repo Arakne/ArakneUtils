@@ -10,7 +10,7 @@ For installing using maven, add this dependency into the `pom.xml` :
 <dependency>
     <groupId>fr.arakne</groupId>
     <artifactId>arakne-map</artifactId>
-    <version>0.7-alpha</version>
+    <version>0.8-alpha</version>
 </dependency>
 ```
 
