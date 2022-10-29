@@ -30,7 +30,7 @@ import org.checkerframework.dataflow.qual.Pure;
  *
  * @param <C> The cell type
  */
-public interface DofusMap<C extends @NonNull MapCell<C>> {
+public interface DofusMap<C extends @NonNull MapCell> {
     /**
      * Get the map size (the number of cells)
      *

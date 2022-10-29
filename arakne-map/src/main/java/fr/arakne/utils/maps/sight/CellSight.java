@@ -35,7 +35,7 @@ import java.util.function.BiConsumer;
  *
  * @param <C> The cell type
  */
-public final class CellSight<C extends @NonNull BattlefieldCell<C>> {
+public final class CellSight<C extends @NonNull BattlefieldCell> {
     private final BattlefieldSight<C> battlefield;
     private final CoordinateCell<C> source;
 

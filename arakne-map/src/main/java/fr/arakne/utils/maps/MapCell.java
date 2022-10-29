@@ -35,7 +35,7 @@ import org.checkerframework.dataflow.qual.Pure;
  *
  * @param <C> Should be the cell class it-self
  */
-public interface MapCell<C extends @NonNull MapCell<C>> {
+public interface MapCell<C extends @NonNull MapCell> {
     /**
      * Get the cell id
      *

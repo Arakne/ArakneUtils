@@ -32,7 +32,7 @@ import java.util.Objects;
  *
  * https://github.com/Emudofus/Dofus/blob/1.29/ank/battlefield/utils/Pathfinding.as#L191
  */
-public final class CoordinateCell<C extends @NonNull MapCell<C>> {
+public final class CoordinateCell<C extends @NonNull MapCell> {
     private final C cell;
 
     private final int x;
